@@ -1,0 +1,89 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "map/MapaBomberman.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "map"
+    ],
+    "fileStates": {
+        "grama.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "map/Bombermantiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "map/MapaBomberman.tmx": {
+            "scale": 1.85546875,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 160.0673684210526,
+                "y": 120.18526315789474
+            }
+        },
+        "map/mapa bomberman.tmx": {
+            "scale": 1.7671130952380951,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 165.8071578947369,
+                "y": 119.68673684210529
+            }
+        },
+        "map/mapa.tmx": {
+            "scale": 1.85546875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 159.5284210526316,
+                "y": 120.45473684210526
+            }
+        },
+        "map/parede-destruivel.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "parede-destruivel-marrom.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "parede-fixa.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/joaop/Desktop/2º PERÍODO/POO/EE - POO - TRAB2 - JOÃO PEDRO SANDRINI MILANEZI - PEDRO HENRIQUE CARON SANDRINI",
+    "last.imagePath": "C:/Users/joaop/Desktop/2º PERÍODO/POO/EE - POO - TRAB2 - JOÃO PEDRO SANDRINI MILANEZI - PEDRO HENRIQUE CARON SANDRINI/map",
+    "map.height": 15,
+    "map.lastUsedExportFilter": "Ficheiros CSV (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 20,
+    "openFiles": [
+        "map/Bombermantiles.tsx",
+        "map/MapaBomberman.tmx"
+    ],
+    "project": "mapa-tiled.tiled-project",
+    "recentFiles": [
+        "map/Bombermantiles.tsx",
+        "map/MapaBomberman.tmx",
+        "map/parede-destruivel.tsx",
+        "map/mapa bomberman.tmx",
+        "parede-fixa.tsx",
+        "grama.tsx",
+        "parede-destruivel-marrom.tsx",
+        "map/mapa.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.type": 1
+}
