@@ -30,16 +30,17 @@ class Mapa:
             for col_idx in range(len(self._mapMatrix[0])):
                 px = col_idx * ConfigJogo.TAM_TILE
 
-                if self._mapMatrix[lin_idx][col_idx] == TileType.GRAMA:
+                if self._mapMatrix[lin_idx][col_idx] == 0:
                     tela.blit(self.grama, (px, py))
 
-                elif self._mapMatrix[lin_idx][col_idx] == TileType.DESTRUTIVELC:
+                elif self._mapMatrix[lin_idx][col_idx] == 1:
                     tela.blit(self.destrutivelC, (px, py))
 
-                elif self._mapMatrix[lin_idx][col_idx] == TileType.DESTRUTIVELM:
+                elif self._mapMatrix[lin_idx][col_idx] == 2:
                     tela.blit(self.destrutivelM, (px, py))
 
-                elif self._mapMatrix[lin_idx][col_idx] == TileType.FIXA:
+                elif self._mapMatrix[lin_idx][col_idx] == 3:
+
                     tela.blit(self.fixa, (px, py))
                 
         pygame.display.flip()
