@@ -34,11 +34,9 @@ class CenaInicial:
         # evento de prosseguimento
         if pygame.key.get_pressed()[pygame.K_1]:
             self.encerrada = True
-            return 1
         
         if pygame.key.get_pressed()[pygame.K_2]:
             self.encerrada = True
-            return 2
 
     def atualiza_estado(self):
         if self.cronometro.tempo_passado() > 0.35:
