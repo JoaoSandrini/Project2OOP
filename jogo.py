@@ -1,7 +1,7 @@
 import pygame
-from configJogo import ConfigJogo
-from cenaInicial import CenaInicial
-from cenaPrincipal import CenaPrincipal
+from config_jogo import ConfigJogo
+from cena_inicial import CenaInicial
+from cena_principal import CenaPrincipal
 
 class Jogo:
     def __init__(self):
@@ -13,8 +13,8 @@ class Jogo:
         cena.rodar()
         
         while True:
-            cenaPrincipal = CenaPrincipal(self.tela)
-            cenaPrincipal.rodar()
+            cena_principal = CenaPrincipal(self.tela, cena.num_jogadores)
+            cena_principal.rodar()
 
             #cenaFinal = CenaWin(self.tela, cenaPrincipal)
             #cenaFinal.rodar()

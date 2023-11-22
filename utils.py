@@ -1,6 +1,7 @@
 import pygame
 from typing import Tuple 
-def lerImagem(caminho: str, tamanho: Tuple[int, int]):
+
+def ler_imagem(caminho: str, tamanho: Tuple[int, int]):
     # le a imagem do arquivo
     image = pygame.image.load(caminho)
 
