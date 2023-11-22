@@ -3,14 +3,24 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "MapaBomberman.tmx",
     "expandedProjectPaths": [
         "map",
         "."
     ],
     "fileStates": {
         "Bombermantiles.tsx": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "MapaBomberman.tmx": {
+            "scale": 1.85546875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 158.98947368421054,
+                "y": 119.10736842105263
+            }
         },
         "grama.tsx": {
             "dynamicWrapping": true,
@@ -60,7 +70,7 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "C:/Users/joaop/Desktop/2º PERÍODO/POO/EE - POO - TRAB2 - JOÃO PEDRO SANDRINI MILANEZI - PEDRO HENRIQUE CARON SANDRINI",
+    "last.exportedFilePath": "C:/Users/joaop/Desktop/2º PERÍODO/POO/EE - POO - TRAB2 - JOÃO PEDRO SANDRINI MILANEZI - PEDRO HENRIQUE CARON SANDRINI/map",
     "last.imagePath": "C:/Users/joaop/Desktop/2º PERÍODO/POO/EE - POO - TRAB2 - JOÃO PEDRO SANDRINI MILANEZI - PEDRO HENRIQUE CARON SANDRINI/map",
     "map.height": 15,
     "map.lastUsedExportFilter": "Ficheiros CSV (*.csv)",
@@ -69,9 +79,13 @@
     "map.tileWidth": 16,
     "map.width": 20,
     "openFiles": [
+        "Bombermantiles.tsx",
+        "MapaBomberman.tmx"
     ],
     "project": "mapa-tiled.tiled-project",
     "recentFiles": [
+        "Bombermantiles.tsx",
+        "MapaBomberman.tmx",
         "map/Bombermantiles.tsx",
         "map/MapaBomberman.tmx",
         "map/parede-destruivel.tsx",

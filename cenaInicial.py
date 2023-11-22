@@ -6,7 +6,7 @@ from lerImagem import lerImagem
 from cronometro import Cronometro
 
 class CenaInicial:
-    def __init__(self, tela):
+    def __init__(self, tela: pygame.display):
         self.tela = tela
         self.encerrada = False
 
@@ -32,12 +32,14 @@ class CenaInicial:
             sys.exit(0)
 
         # evento de prosseguimento
-        if pygame.key.get_pressed()[pygame.K_1]:
-            self.encerrada = True
-        
-        if pygame.key.get_pressed()[pygame.K_2]:
+        if pygame.key.get_pressed()[pygame.K_F1]:
+            self.modoDeJogo = 1
             self.encerrada = True
 
+        if pygame.key.get_pressed()[pygame.K_F2]:
+            self.modoDeJogo = 2
+            self.encerrada = True
+ 
     def atualiza_estado(self):
         if self.cronometro.tempo_passado() > 0.35:
             self.mostrarSubtitulo = not self.mostrarSubtitulo

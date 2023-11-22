@@ -7,3 +7,4 @@ class ConfigJogo:
     LARGURA_LOGO = 444
     ALTURA_LOGO = 272
     ESPACO_SUBTITULO = 1.3
+    TAM_TILE = 16
