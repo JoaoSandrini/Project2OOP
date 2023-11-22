@@ -1,6 +1,5 @@
 import sys
 import pygame
-import random 
 import csv
 from enum import Enum
 from configJogo import ConfigJogo
@@ -29,11 +28,9 @@ class Mapa:
         for lin_idx in range(len(self._mapMatrix)):
             py = lin_idx * ConfigJogo.TAM_TILE
             for col_idx in range(len(self._mapMatrix[0])):
-                self._mapMatrix[lin_idx][col_idx] = int(self._mapMatrix[lin_idx][col_idx])
                 px = col_idx * ConfigJogo.TAM_TILE
 
                 if self._mapMatrix[lin_idx][col_idx] == TileType.GRAMA:
-                    pygame.draw.rect(tela, "blue", pygame.Rect(px, py, 16, 16))
                     tela.blit(self.grama, (px, py))
 
                 elif self._mapMatrix[lin_idx][col_idx] == TileType.DESTRUTIVELC:
