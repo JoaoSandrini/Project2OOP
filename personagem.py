@@ -29,12 +29,17 @@ class Personagem:
         self.tela.blit(self.personagem, (self._x, self._y))
 
     def tratamento_eventos(self, jogador: int):
-        if time.time() - self._time_last_move > 0.01:
-        
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.soltar_bomba()
+                    print(len(self.bombas))
+
+        #if time.time() - self._time_last_move > 0.01:
             new_y = self._y
             new_x = self._x
 
-            if jogador == 1: 
+            if jogador == 1:
                 if pygame.key.get_pressed()[pygame.K_a]:
                     new_x = self._x - ConfigJogo.VELOCIDADE_PERSONAGEM
                 if pygame.key.get_pressed()[pygame.K_d]:
@@ -49,8 +54,6 @@ class Personagem:
                     self._y = new_y
                     self._time_last_move = time.time()
 
-                if pygame.key.get_pressed()[pygame.K_SPACE]:
-                    self.soltar_bomba()
 
             if jogador == 2: 
                 if pygame.key.get_pressed()[pygame.K_LEFT]:

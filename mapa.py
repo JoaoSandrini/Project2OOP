@@ -26,7 +26,7 @@ class Mapa:
  
     def desenha(self, tela: pygame.Surface):
         for lin_idx in range(len(self.map_matrix)):
-            py = lin_idx * ConfigJogo.TAM_TILE
+            py = (lin_idx * ConfigJogo.TAM_TILE) + ConfigJogo.ALTURA_MENU
             for col_idx in range(len(self.map_matrix[0])):
                 px = col_idx * ConfigJogo.TAM_TILE
 
