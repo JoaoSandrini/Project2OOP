@@ -18,7 +18,8 @@ class Personagem:
         self._mapa = mapa
         self._x = x
         self._y = y
-
+        self.pontos = 0
+        
         self.tela = tela
         
         self._time_last_move = 0
@@ -35,7 +36,7 @@ class Personagem:
                     self.soltar_bomba()
                     print(len(self.bombas))
 
-        #if time.time() - self._time_last_move > 0.01:
+        if time.time() - self._time_last_move > 0.01:
             new_y = self._y
             new_x = self._x
 

@@ -43,6 +43,7 @@ class Mapa:
                     tela.blit(self.fixa, (px, py))
 
     def is_wall(self, x, y):
+        y -= ConfigJogo.ALTURA_MENU
 
         lin_idx_c_e = y // ConfigJogo.TAM_TILE
         col_idx_c_e = x // ConfigJogo.TAM_TILE

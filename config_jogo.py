@@ -1,7 +1,7 @@
 class ConfigJogo:
 
     TAM_TILE = 32
-    ALTURA_MENU = 0
+    ALTURA_MENU = 75
     LARGURA_TELA = TAM_TILE*20
     ALTURA_TELA = TAM_TILE*15 + ALTURA_MENU
     FONTE_SUBTITULO = 36
@@ -14,3 +14,6 @@ class ConfigJogo:
     DURACAO_BOMBA = 2
     ALCANCE_BOMBA = 5
     MAX_BOMBA = 4
+    DURACAO_JOGO = 120
+    FONTE_HUD = 50
+    COR_FONTE_HUD = (255, 255, 255)
