@@ -5,8 +5,8 @@
     },
     "activeFile": "MapaBomberman.tmx",
     "expandedProjectPaths": [
-        "map",
-        "."
+        ".",
+        "map"
     ],
     "fileStates": {
         "Bombermantiles.tsx": {
@@ -18,8 +18,8 @@
             "scale": 1.85546875,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 157.91157894736844,
-                "y": 118.02947368421053
+                "x": 157.37263157894733,
+                "y": 116.95157894736842
             }
         },
         "grama.tsx": {

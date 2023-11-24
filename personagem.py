@@ -19,7 +19,7 @@ class Personagem:
         self._x = x
         self._y = y
         self.pontos = 0
-        
+
         self.tela = tela
         
         self._time_last_move = 0
@@ -36,7 +36,7 @@ class Personagem:
                     self.soltar_bomba()
                     print(len(self.bombas))
 
-        if time.time() - self._time_last_move > 0.01:
+        if time.time() - self._time_last_move > ConfigJogo.CD_PERSONAGEM:
             new_y = self._y
             new_x = self._x
 
@@ -50,7 +50,7 @@ class Personagem:
                 if pygame.key.get_pressed()[pygame.K_w]:
                     new_y = self._y - ConfigJogo.VELOCIDADE_PERSONAGEM
                 
-                if not self._mapa.is_wall(new_x, new_y):
+                if not self._mapa.is_any_wall(new_x, new_y):
                     self._x = new_x
                     self._y = new_y
                     self._time_last_move = time.time()
@@ -66,7 +66,7 @@ class Personagem:
                 if pygame.key.get_pressed()[pygame.K_UP]:
                     new_y = self._y - ConfigJogo.VELOCIDADE_PERSONAGEM
                 
-                if not self._mapa.is_wall(new_x, new_y):
+                if not self._mapa.is_any_wall(new_x, new_y):
                     self._x = new_x
                     self._y = new_y
                     self._time_last_move = time.time()

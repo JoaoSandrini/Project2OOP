@@ -6,15 +6,19 @@ from personagem import Personagem
 import pygame
 from utils import ler_imagem
 from cronometro import Cronometro
-
+from fantasma import Fantasma
 from config_jogo import ConfigJogo
-
+from alienigena import Aienigena
 class CenaPrincipal():
     def __init__(self, tela: pygame.display, num_jogadores: int):
+
         self.mapa = Mapa()
         self.tela = tela
         self.encerrada = False
 
+        self.fantasma = Fantasma(self.mapa, self.tela)
+        self.alien = Aienigena(self.mapa, self.tela)
+        
         self.cronometro = Cronometro()
 
         self.fonte_hud = pygame.font.SysFont(None, ConfigJogo.FONTE_SUBTITULO)
@@ -34,6 +38,14 @@ class CenaPrincipal():
         while not self.encerrada:
             self.desenha_menu()
             self.mapa.desenha(self.tela)
+
+            self.fantasma.desenha()
+            self.fantasma.tratamento_eventos()
+
+            self.alien.desenha()
+            self.alien.tratamento_eventos()
+
+            self
             self.p1.tratamento_eventos(1) 
             self.tratamento_eventos()
             self.p1.desenha()

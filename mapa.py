@@ -42,7 +42,7 @@ class Mapa:
                 elif self.map_matrix[lin_idx][col_idx] == TileType.FIXA.value:
                     tela.blit(self.fixa, (px, py))
 
-    def is_wall(self, x, y):
+    def is_any_wall(self, x, y):
         y -= ConfigJogo.ALTURA_MENU
 
         lin_idx_c_e = y // ConfigJogo.TAM_TILE
@@ -55,5 +55,20 @@ class Mapa:
                 if 0 <= lin_idx < len(self.map_matrix) and 0 <= col_idx < len(self.map_matrix[0]):
                     tile_type = self.map_matrix[lin_idx][col_idx]
                     if tile_type != TileType.GRAMA.value:
+                        return True
+    
+    def is_fixed_wall(self, x, y):
+        y -= ConfigJogo.ALTURA_MENU
+
+        lin_idx_c_e = y // ConfigJogo.TAM_TILE
+        col_idx_c_e = x // ConfigJogo.TAM_TILE
+        lin_idx_b_d = (y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE
+        col_idx_b_d = (x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE
+
+        for lin_idx in range(lin_idx_c_e, lin_idx_b_d + 1):
+            for col_idx in range(col_idx_c_e, col_idx_b_d + 1):
+                if 0 <= lin_idx < len(self.map_matrix) and 0 <= col_idx < len(self.map_matrix[0]):
+                    tile_type = self.map_matrix[lin_idx][col_idx]
+                    if tile_type == TileType.FIXA.value:
                         return True
 

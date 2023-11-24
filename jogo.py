@@ -8,6 +8,7 @@ from time import time
 class Jogo:
     def __init__(self):
         pygame.init()
+
         self.tela = pygame.display.set_mode((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA))
         self.bombas = [[],[]]
 
