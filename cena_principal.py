@@ -44,8 +44,13 @@ class CenaPrincipal():
 
             self.alien.desenha()
             self.alien.tratamento_eventos()
+            
+            for projetil in self.alien.projeteis:
+                projetil.desenha(self.tela)
+                projetil.tratamento_eventos()
+                if projetil.colidido:
+                    self.alien.projeteis.remove(projetil)
 
-            self
             self.p1.tratamento_eventos(1) 
             self.tratamento_eventos()
             self.p1.desenha()
@@ -76,7 +81,7 @@ class CenaPrincipal():
         pygame.draw.rect(self.tela, 'green', (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU), 4)
 
         fonte_hud = pygame.font.SysFont(None, ConfigJogo.FONTE_HUD)
-        tempo_restante = int(120 - self.cronometro.tempo_passado())
+        tempo_restante = int(ConfigJogo.DURACAO_JOGO - self.cronometro.tempo_passado())
         minutos =  tempo_restante // 60
         segundos =  tempo_restante % 60
 

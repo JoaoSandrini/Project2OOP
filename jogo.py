@@ -11,6 +11,7 @@ class Jogo:
 
         self.tela = pygame.display.set_mode((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA))
         self.bombas = [[],[]]
+        self.projeteis = []
 
     def rodar(self):
         cena = CenaInicial(self.tela)
@@ -22,19 +23,9 @@ class Jogo:
 
             self.bombas[0] = cena_principal.p1.bombas
             self.bombas[1] = cena_principal.p2.bombas
-"""
-            for bomba in cena_principal.p1.bombas:
-                if len(self.bombas[0]) < 4:  # Limit to 4 bombs per player
-                    self.bombas[0].append(bomba)
-
-            if cena_principal.p2:
-                for bomba in cena_principal.p2.bombas:
-                    if len(self.bombas[1]) < 4:
-                        self.bombas[1].append(bomba)
-                
-
-
-
+            self.projeteis = cena_principal.alien.projeteis
+""" 
+            
             #cenaFinal = CenaWin(self.tela, cenaPrincipal)
             #cenaFinal.rodar()
 """

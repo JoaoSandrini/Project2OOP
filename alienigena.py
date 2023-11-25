@@ -5,6 +5,7 @@ from config_jogo import ConfigJogo
 from utils import ler_imagem
 import time
 from enum import Enum
+from projetil import Projetil
 
 class Direcao(Enum):
     ESQUERDA = 0
@@ -23,11 +24,18 @@ class Aienigena:
         self.tela = tela
 
         self._time_last_move = 0
+        self._time_last_shot = 0
+
+        self.projeteis = []
         
     def desenha(self):
         self.tela.blit(self.img_alien, (self._x, self._y))
 
     def tratamento_eventos(self):
+        print(len(self.projeteis))
+        if time.time() - self._time_last_shot >= ConfigJogo.CD_SHOT_ALIEN:
+            self.atira()
+            self._time_last_shot = time.time()
 
         if time.time() - self._time_last_move > ConfigJogo.CD_ALIEN:
 
@@ -49,3 +57,8 @@ class Aienigena:
                 self._time_last_move = time.time()
             else:
                 self._idx_movimento = random.randint(0, 3)
+
+        
+    def atira(self):
+            projetil = Projetil(self._x, self._y, self._mapa)
+            self.projeteis.append(projetil)
