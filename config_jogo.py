@@ -36,7 +36,7 @@ class ConfigJogo:
     COR_BORDA_HUD = (0, 255, 0)
     VIDA_QUARTEL = 20
     ESPESSURA_AURA = 5
-    VIDA_PERSONAGEM = 1
+    VIDA_PERSONAGEM = 3
     VIDA_INIMIGO = 1
     ORIGEM = (0, 0)
 

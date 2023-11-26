@@ -22,6 +22,7 @@ class Alienigena:
         self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
         
+        self.colisao = self.img_alien.get_rect(topleft=(self._x, self._y))
         self.tela = tela
 
         self._time_last_move = 0
@@ -33,7 +34,6 @@ class Alienigena:
         self.tela.blit(self.img_alien, (self._x, self._y))
 
     def tratamento_eventos(self):
-        print(len(self.projeteis))
         if time.time() - self._time_last_shot >= ConfigJogo.CD_SHOT_ALIEN:
             self.atira()
             self._time_last_shot = time.time()

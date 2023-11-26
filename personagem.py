@@ -1,3 +1,4 @@
+import time
 import pygame
 import random
 from mapa import Mapa
@@ -20,9 +21,12 @@ class Personagem:
         self._y = y
         self.pontos = 0
         self.colisao = self.personagem.get_rect(topleft=(self._x, self._y))
+        self.inalvejavel = True
+        
         self.vida = ConfigJogo.VIDA_PERSONAGEM
 
         self._time_last_move = 0
+        self.time_inalvejavel = time.time()
         self.tela = tela
         
         self.bombas: Bomba = []
@@ -30,11 +34,15 @@ class Personagem:
     def desenha(self):
         self.tela.blit(self.personagem, (self._x, self._y))
 
-    def soltar_bomba(self):
+    def soltar_bomba(self, bombasVetor, player):
         if len(self.bombas) < ConfigJogo.MAX_BOMBA:
             bomba = Bomba(self, self._x+ConfigJogo.TAM_TILE/2, self._y+ConfigJogo.TAM_TILE/2)
             if bomba.verificar():
                 self.bombas.append(bomba)
+                if player == 1:
+                    bombasVetor[0].append(bomba)
+                else:
+                    bombasVetor[1].append(bomba)
 
     def getX(self):
         return self._x
