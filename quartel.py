@@ -26,12 +26,12 @@ class Quartel:
                 self.inimigos.append(Alienigena(self.mapa, self.tela))
             self._time_last_spawn = time.time()
 
-    def desenha(self):
+    def desenha(self, bombaVetores):
         self.tela.blit(self.img_quartel, (self._x, self._y))
         for inimigo in self.inimigos:
             if type(inimigo) == Fantasma:
                 inimigo.desenha()
-                inimigo.tratamento_eventos()
+                inimigo.tratamento_eventos(bombaVetores, self.inimigos)
             else:
                 for projetil in inimigo.projeteis:
                     projetil.desenha(self.tela)
@@ -39,4 +39,4 @@ class Quartel:
                     if projetil.colidido:
                         inimigo.projeteis.remove(projetil)
                 inimigo.desenha()
-                inimigo.tratamento_eventos()
+                inimigo.tratamento_eventos(bombaVetores, self.inimigos)
