@@ -20,6 +20,7 @@ class Personagem:
         self._y = y
         self.pontos = 0
         self.colisao = self.personagem.get_rect(topleft=(self._x, self._y))
+        self.vida = ConfigJogo.VIDA_PERSONAGEM
 
         self._time_last_move = 0
         self.tela = tela

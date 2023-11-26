@@ -15,9 +15,10 @@ class Fantasma:
     def __init__(self, mapa: Mapa, tela: pygame.Surface) -> None:
         self.img_fantasma= ler_imagem('enemies/enemy-fantasma.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
 
+        self.vida = ConfigJogo.VIDA_ALIEN
         self._mapa = mapa
-        self._x = 288
-        self._y = ConfigJogo.ALTURA_MENU + 224
+        self._x = ConfigJogo.QUARTEL_X
+        self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
         
         self.tela = tela
@@ -25,9 +26,10 @@ class Fantasma:
         self._time_last_move = 0
         
     def desenha(self):
-        self.superficie_circulo = pygame.Surface((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA), pygame.SRCALPHA)
-        pygame.draw.circle(self.superficie_circulo, ConfigJogo.COR_AURA, (self._x + ConfigJogo.TAM_TILE/2, self._y + ConfigJogo.TAM_TILE/2), ConfigJogo.RAIO_AURA)
-        self.tela.blit(self.superficie_circulo, (0,0))
+        #self.superficie_circulo = pygame.Surface((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA), pygame.SRCALPHA)
+        #pygame.draw.circle(superficie_circulo, ConfigJogo.COR_AURA, (self._x + ConfigJogo.TAM_TILE/2, self._y + ConfigJogo.TAM_TILE/2), ConfigJogo.RAIO_AURA)
+        #self.tela.blit(superficie_circulo, (0, 0))
+        pygame.draw.circle(self.tela, ConfigJogo.COR_AURA, (self._x+ ConfigJogo.TAM_TILE/2, self._y + ConfigJogo.TAM_TILE/2), ConfigJogo.RAIO_AURA, ConfigJogo.ESPESSURA_AURA)
         self.tela.blit(self.img_fantasma, (self._x, self._y))
 
     def tratamento_eventos(self):

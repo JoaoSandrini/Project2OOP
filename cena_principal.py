@@ -9,18 +9,21 @@ import pygame
 from cronometro import Cronometro
 from config_jogo import ConfigJogo
 from utils import ler_imagem
+from quartel import Quartel
+import random
 
 class CenaPrincipal():
     def __init__(self, tela: pygame.display, num_jogadores: int):
         self.mapa = Mapa()
         self.tela = tela
         self.encerrada = False
-        self.alien = Aienigena(self.mapa, self.tela)
-        self.fantasma = Fantasma(self.mapa, self.tela)
+        self.inimigos = []
+        self.quartel = Quartel()
         self.cronometro = Cronometro()
-
-        self.img_relogio = ler_imagem('telas/relogio.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
         
+        self._time_last_spawn = 0
+        self.img_relogio = ler_imagem('telas/relogio.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
+
         if num_jogadores == 1:
             self.p1 = Personagem(self.mapa, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU, self.tela)
             self.p2 = False
@@ -35,22 +38,36 @@ class CenaPrincipal():
         while not self.encerrada:
             self.desenha_menu()
             self.mapa.desenha(self.tela)
+            
+            self.quartel.desenha(self.tela)
 
-            self.alien.desenha()
-            self.alien.tratamento_eventos()
+            for inimigo in self.inimigos:
+                if type(inimigo) == Fantasma:
+                    inimigo.desenha()
+                    inimigo.tratamento_eventos()
+                else:
+                    for projetil in inimigo.projeteis:
+                        projetil.desenha(self.tela)
+                        projetil.tratamento_eventos()
+                        if projetil.colidido:
+                            inimigo.projeteis.remove(projetil)
+                    inimigo.desenha()
+                    inimigo.tratamento_eventos()
+                """
+                if inimigo.colidido:
+                    self.inimigos.remove(inimigo)
 
-            self.fantasma.desenha()
-            self.fantasma.tratamento_eventos()
-
-            self.p1.desenha()
-            if self.p2!=False:
-                self.p2.desenha()
-
-            for projetil in self.alien.projeteis:
+                         
+                for projetil in self.inimigos[i].projeteis:
                 projetil.desenha(self.tela)
                 projetil.tratamento_eventos()
                 if projetil.colidido:
                     self.alien.projeteis.remove(projetil)
+                    """
+
+            self.p1.desenha()
+            if self.p2!=False:
+                self.p2.desenha()
 
             self.tratamento_eventos()
 
@@ -74,6 +91,14 @@ class CenaPrincipal():
                     self.p1.soltar_bomba()
                 if event.key == pygame.K_0 and self.p2:
                     self.p2.soltar_bomba()
+
+        if  time.time() - self._time_last_spawn > 2:
+            rand = random.randint(0, 1)
+            if rand == 0:
+                self.inimigos.append(Fantasma(self.mapa, self.tela))
+            elif rand == 1:
+                self.inimigos.append(Aienigena(self.mapa, self.tela))
+            self._time_last_spawn = time.time()
 
         if self.p1 and time.time() - self.p1._time_last_move > 0.01:
             new_p1x = self.p1.getX()
@@ -147,8 +172,8 @@ class CenaPrincipal():
             #    self.soltar_bomba()
 
     def desenha_menu(self):
-        pygame.draw.rect(self.tela, 'blue', (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU))
-        pygame.draw.rect(self.tela, 'green', (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU), 4)
+        pygame.draw.rect(self.tela, ConfigJogo.COR_HUD, (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU))
+        pygame.draw.rect(self.tela, ConfigJogo.COR_BORDA_HUD, (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU), 4)
 
         fonte_hud = pygame.font.SysFont(None, ConfigJogo.FONTE_HUD)
         tempo_restante = int(ConfigJogo.DURACAO_JOGO - self.cronometro.tempo_passado())
