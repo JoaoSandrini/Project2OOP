@@ -18,6 +18,7 @@ class Bomba:
         self.explodida = False
         self.verificada = False
         self.colisao = self.img_bomba.get_rect(topleft=(self._x, self._y))
+        self.explosoes = []
         self.explosao = None
         self.pos = []
 
@@ -32,6 +33,8 @@ class Bomba:
                         self.pos.append([lin, col])
                     break
                 tela.blit(self.img_explosao, (self._x+i*ConfigJogo.TAM_TILE, self._y))
+                colisaoExplosao = pygame.Rect(self._x+(i)*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                self.explosoes.append(colisaoExplosao)
                 
             for i in range(self.alcance+1): #X NEG
                 tileType = mapa.destrutivel(self._x-i*ConfigJogo.TAM_TILE, self._y)
@@ -43,6 +46,8 @@ class Bomba:
                     break
                 else:
                     tela.blit(self.img_explosao, (self._x-i*ConfigJogo.TAM_TILE, self._y))
+                    colisaoExplosao = pygame.Rect(self._x-i*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                    self.explosoes.append(colisaoExplosao)
 
             for i in range(self.alcance+1): #Y POS
                 tileType = mapa.destrutivel(self._x, self._y+i*ConfigJogo.TAM_TILE)
@@ -54,6 +59,8 @@ class Bomba:
                     break
                 else:
                     tela.blit(self.img_explosao, (self._x, self._y+i*ConfigJogo.TAM_TILE))
+                    colisaoExplosao = pygame.Rect(self._x, self._y+i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                    self.explosoes.append(colisaoExplosao)
 
             for i in range(self.alcance+1): #Y NEG
                 tileType = mapa.destrutivel(self._x, self._y-i*ConfigJogo.TAM_TILE)
@@ -65,9 +72,8 @@ class Bomba:
                     break
                 else:
                     tela.blit(self.img_explosao, (self._x, self._y-i*ConfigJogo.TAM_TILE))
-                #tela.blit(self.img_explosao, (self._x, self._y-i*ConfigJogo.TAM_TILE))
-                #tela.blit(self.img_explosao, (self._x, self._y+i*ConfigJogo.TAM_TILE))
-            
+                    colisaoExplosao = pygame.Rect(self._x, self._y-i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                    self.explosoes.append(colisaoExplosao)
 
     def verificar(self):
         #Verifica se existe alguma bomba na posicao, se existir retorna False

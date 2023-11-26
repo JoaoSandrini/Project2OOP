@@ -63,7 +63,8 @@ class CenaPrincipal():
        
             pygame.display.flip()
 
-    def tratamento_eventos(self):            
+    def tratamento_eventos(self):
+        tempo = time.time()
         # evento de saida
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
             sys.exit(0)
@@ -75,7 +76,15 @@ class CenaPrincipal():
                 if event.key == pygame.K_0 and self.p2:
                     self.p2.soltar_bomba()
 
-        if self.p1 and time.time() - self.p1._time_last_move > 0.01:
+        if self.p1 and tempo - self.p1._time_last_move > 0.01:
+            if tempo - self.p1.time_inalvejavel < 5:
+                if ((tempo - self.p1.time_inalvejavel) % 0.5) < 0.25:
+                    self.p1.personagem.set_alpha(100)
+                else:
+                    self.p1.personagem.set_alpha(190)
+            else:
+                self.p1.personagem.set_alpha(255)
+
             new_p1x = self.p1.getX()
             new_p1y = self.p1.getY()
         
@@ -93,8 +102,9 @@ class CenaPrincipal():
                 new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
             
             if not self.p1._mapa.is_any_wall(new_p1x, new_p1y):
+
                 bombaColisao = False
-                for bomba in self.p1.bombas:
+                for bomba in self.p1.bombas:  
                     if not bomba.explosao and not self.p1.colisao.colliderect(bomba.colisao): #Para não colidir após colocar a bomba
                         bomba_tile = (bomba.getX() // ConfigJogo.TAM_TILE, bomba.getY() // ConfigJogo.TAM_TILE)
                         new_p1_tile_left = (new_p1x // ConfigJogo.TAM_TILE, new_p1y // ConfigJogo.TAM_TILE)
@@ -103,6 +113,20 @@ class CenaPrincipal():
 
                         if bomba_tile in [new_p1_tile_left, new_p1_tile_right, new_p1_tile_down]:
                             bombaColisao = True
+                    if bomba.explosao: # colisao com a explosao
+                        for rect in bomba.explosoes:
+                            if rect.colliderect(self.p1.colisao):
+                                if time.time() - self.p1.time_inalvejavel > 5:
+                                    print(self.p1.vida)
+                                    self.p1.vida -= 1
+                                    if self.p1.vida == 0:
+                                        self.encerrada = True
+                                        print("GAME OVER")
+                                        sys.exit(0)
+                                    else:
+                                        new_p1x = ConfigJogo.TAM_TILE
+                                        new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
+                                        self.p1.time_inalvejavel=time.time()
 
                 if not bombaColisao:
                     self.p1.setX(new_p1x)
@@ -112,6 +136,14 @@ class CenaPrincipal():
                     self.p1._time_last_move = time.time()
 
         if self.p2 and time.time() - self.p2._time_last_move > 0.01: 
+            if tempo - self.p2.time_inalvejavel < 5:
+                if ((tempo - self.p2.time_inalvejavel) % 0.5) < 0.25:
+                    self.p2.personagem.set_alpha(100)
+                else:
+                    self.p2.personagem.set_alpha(190)
+            else:
+                self.p2.personagem.set_alpha(255)
+
             new_p2x = self.p2.getX()
             new_p2y = self.p2.getY()
 
@@ -135,6 +167,19 @@ class CenaPrincipal():
 
                         if bomba_tile in [new_p2_tile_left, new_p2_tile_right, new_p2_tile_down]:
                             bombaColisao = True
+                    if bomba.explosao: # colisao com a explosao
+                        for rect in bomba.explosoes:
+                            if rect.colliderect(self.p2.colisao):
+                                if time.time() - self.p2.time_inalvejavel > 5:
+                                    self.p2.vida -= 1
+                                    if self.p2.vida == 0:
+                                        self.encerrada = True
+                                        print("GAME OVER")
+                                        sys.exit(0)
+                                    else:
+                                        new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
+                                        new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
+                                        self.p2.time_inalvejavel=time.time()
 
                 if not bombaColisao:
                     self.p2.setX(new_p2x)

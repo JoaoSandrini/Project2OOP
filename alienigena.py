@@ -32,7 +32,6 @@ class Aienigena:
         self.tela.blit(self.img_alien, (self._x, self._y))
 
     def tratamento_eventos(self):
-        print(len(self.projeteis))
         if time.time() - self._time_last_shot >= ConfigJogo.CD_SHOT_ALIEN:
             self.atira()
             self._time_last_shot = time.time()
