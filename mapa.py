@@ -43,6 +43,7 @@ class Mapa:
                     tela.blit(self.fixa, (px, py))
 
     def is_any_wall(self, x, y):
+        
         y -= ConfigJogo.ALTURA_MENU
 
         lin_idx_c_e = y // ConfigJogo.TAM_TILE
@@ -58,6 +59,7 @@ class Mapa:
                         return True
                     
     def is_fixed_wall(self, x, y):
+        
         y -= ConfigJogo.ALTURA_MENU
 
         lin_idx_c_e = y // ConfigJogo.TAM_TILE
@@ -96,3 +98,19 @@ class Mapa:
             self.map_matrix[lin][col] = TileType.DESTRUTIVEL_M.value
         else:  
             self.map_matrix[lin][col] = TileType.GRAMA.value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -9,6 +9,10 @@ class Jogo:
     def __init__(self):
         pygame.init()
         self.tela = pygame.display.set_mode((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA))
+        pygame.display.set_caption('Bomberman')
+        icone = pygame.image.load('items/bomba.png')  # Replace with the path to your icon image
+        pygame.display.set_icon(icone)
+
         self.bombas = [[],[]]
         self.projeteis = []
 

@@ -23,7 +23,7 @@ class Personagem:
         self.colisao = self.personagem.get_rect(topleft=(self._x, self._y))
         self.inalvejavel = True
         
-        self.vida = 3
+        self.vida = ConfigJogo.VIDA_PERSONAGEM
 
         self._time_last_move = 0
         self.time_inalvejavel = time.time()

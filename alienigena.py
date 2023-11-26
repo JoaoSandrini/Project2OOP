@@ -12,13 +12,14 @@ class Direcao(Enum):
     DIREITA = 1
     BAIXO = 2
     CIMA = 3
-class Aienigena:
+class Alienigena:
     def __init__(self, mapa: Mapa, tela: pygame.Surface) -> None:
         self.img_alien= ler_imagem('enemies/enemy-alien.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
 
+        self.vida = ConfigJogo.VIDA_INIMIGO
         self._mapa = mapa
-        self._x = 288
-        self._y = ConfigJogo.ALTURA_MENU + 224
+        self._x = ConfigJogo.QUARTEL_X
+        self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
         
         self.tela = tela
