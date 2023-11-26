@@ -15,7 +15,7 @@ class Fantasma:
     def __init__(self, mapa: Mapa, tela: pygame.Surface) -> None:
         self.img_fantasma= ler_imagem('enemies/enemy-fantasma.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
 
-        self.vida = ConfigJogo.VIDA_ALIEN
+        self.vida = ConfigJogo.VIDA_INIMIGO
         self._mapa = mapa
         self._x = ConfigJogo.QUARTEL_X
         self._y = ConfigJogo.QUARTEL_Y
