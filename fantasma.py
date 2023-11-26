@@ -26,9 +26,9 @@ class Fantasma:
         self._time_last_move = 0
         
     def desenha(self):
-        #self.superficie_circulo = pygame.Surface((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA), pygame.SRCALPHA)
+        #superficie_circulo = pygame.Surface((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA), pygame.SRCALPHA)
         #pygame.draw.circle(superficie_circulo, ConfigJogo.COR_AURA, (self._x + ConfigJogo.TAM_TILE/2, self._y + ConfigJogo.TAM_TILE/2), ConfigJogo.RAIO_AURA)
-        #self.tela.blit(superficie_circulo, (0, 0))
+        #self.tela.blit(superficie_circulo, ConfigJogo.ORIGEM)
         pygame.draw.circle(self.tela, ConfigJogo.COR_AURA, (self._x+ ConfigJogo.TAM_TILE/2, self._y + ConfigJogo.TAM_TILE/2), ConfigJogo.RAIO_AURA, ConfigJogo.ESPESSURA_AURA)
         self.tela.blit(self.img_fantasma, (self._x, self._y))
 
