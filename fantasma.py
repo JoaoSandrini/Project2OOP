@@ -1,5 +1,6 @@
 import pygame
 import random
+from bomba import Bomba
 from mapa import Mapa
 from config_jogo import ConfigJogo
 from utils import ler_imagem
@@ -20,6 +21,8 @@ class Fantasma:
         self._x = ConfigJogo.QUARTEL_X
         self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
+
+        self.colisao = self.img_fantasma.get_rect(topleft=(self._x, self._y))
         
         self.tela = tela
 

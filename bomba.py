@@ -83,7 +83,7 @@ class Bomba:
         self.verificada = True
         return True
             
-    def atualizar(self, mapa: Mapa):
+    def atualizar(self, mapa: Mapa, bombasVetores):
         tempo_atual = time.time()
 
         if not self.explodida and tempo_atual - self.time_lancamento > self.duracao:
@@ -101,9 +101,12 @@ class Bomba:
                 mapa.explodirBloco(lin, col, 1)
             self.explosao = False
             self.p.bombas.remove(self)
+            for bombasVetor in bombasVetores:
+                if self in bombasVetor:
+                    bombasVetor.remove(self)
             
-    def desenha(self, tela: pygame.Surface, mapa: Mapa):
-        self.atualizar(mapa)
+    def desenha(self, tela: pygame.Surface, mapa: Mapa, bombasVetores):
+        self.atualizar(mapa, bombasVetores)
         if not self.explodida and self.verificada:
             tela.blit(self.img_bomba, (self._x, self._y))
         if self.explodida:

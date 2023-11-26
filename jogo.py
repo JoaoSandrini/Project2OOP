@@ -21,11 +21,8 @@ class Jogo:
         cena.rodar()
         
         while True:
-            cena_principal = CenaPrincipal(self.tela, cena.num_jogadores)
+            cena_principal = CenaPrincipal(self.tela, cena.num_jogadores, self.bombas)
             cena_principal.rodar()
-
-            self.bombas[0] = cena_principal.p1.bombas
-            self.bombas[1] = cena_principal.p2.bombas
             self.projeteis = cena_principal.alien.projeteis
 """
             for bomba in cena_principal.p1.bombas:

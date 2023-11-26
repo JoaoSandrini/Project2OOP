@@ -22,6 +22,7 @@ class Alienigena:
         self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
         
+        self.colisao = self.img_alien.get_rect(topleft=(self._x, self._y))
         self.tela = tela
 
         self._time_last_move = 0

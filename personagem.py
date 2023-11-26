@@ -34,11 +34,15 @@ class Personagem:
     def desenha(self):
         self.tela.blit(self.personagem, (self._x, self._y))
 
-    def soltar_bomba(self):
+    def soltar_bomba(self, bombasVetor, player):
         if len(self.bombas) < ConfigJogo.MAX_BOMBA:
             bomba = Bomba(self, self._x+ConfigJogo.TAM_TILE/2, self._y+ConfigJogo.TAM_TILE/2)
             if bomba.verificar():
                 self.bombas.append(bomba)
+                if player == 1:
+                    bombasVetor[0].append(bomba)
+                else:
+                    bombasVetor[1].append(bomba)
 
     def getX(self):
         return self._x
