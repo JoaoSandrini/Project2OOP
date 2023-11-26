@@ -21,7 +21,7 @@ class Fantasma:
         self._x = ConfigJogo.QUARTEL_X
         self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
-
+        self.time_inalvejavel = time.time()
         self.colisao = self.img_fantasma.get_rect(topleft=(self._x, self._y))
         
         self.tela = tela
@@ -35,7 +35,24 @@ class Fantasma:
         pygame.draw.circle(self.tela, ConfigJogo.COR_AURA, (self._x+ ConfigJogo.TAM_TILE/2, self._y + ConfigJogo.TAM_TILE/2), ConfigJogo.RAIO_AURA, ConfigJogo.ESPESSURA_AURA)
         self.tela.blit(self.img_fantasma, (self._x, self._y))
 
-    def tratamento_eventos(self):
+    def tratamento_eventos(self, bombaVetores, inimigos):
+        timeAtt = time.time()
+        self.colisao = self.img_fantasma.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
+        for bombaVetor in bombaVetores:
+            for bomba in bombaVetor:  
+                if bomba.explosao: # colisao com a explosao
+                    for rect in bomba.explosoes:
+                        if rect.colliderect(self.colisao):
+                            if timeAtt - self.time_inalvejavel > 5:
+                                self.time_inalvejavel = timeAtt
+                                self.vida -= 1
+                                if self.vida == 0:
+                                    inimigos.remove(self)
+                                else:
+                                    self.setX(ConfigJogo.QUARTEL_X)
+                                    self.setY(ConfigJogo.QUARTEL_Y)
+
+
 
         if time.time() - self._time_last_move > ConfigJogo.CD_FANTASMA:
 
@@ -57,3 +74,15 @@ class Fantasma:
                 self._time_last_move = time.time()
             else:
                 self._idx_movimento = random.randint(0, 3)
+
+    def getX(self):
+        return self._x
+    
+    def setX(self, x):
+        self._x = x
+
+    def getY(self):
+        return self._y
+    
+    def setY(self, y):
+        self._y = y

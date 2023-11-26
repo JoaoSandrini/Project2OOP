@@ -15,7 +15,7 @@ class Direcao(Enum):
 class Alienigena:
     def __init__(self, mapa: Mapa, tela: pygame.Surface) -> None:
         self.img_alien= ler_imagem('enemies/enemy-alien.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
-
+        self.time_inalvejavel = time.time()
         self.vida = ConfigJogo.VIDA_INIMIGO
         self._mapa = mapa
         self._x = ConfigJogo.QUARTEL_X
@@ -33,7 +33,24 @@ class Alienigena:
     def desenha(self):
         self.tela.blit(self.img_alien, (self._x, self._y))
 
-    def tratamento_eventos(self):
+    def tratamento_eventos(self, bombaVetores, inimigos):
+        timeAtt = time.time()
+        self.colisao = self.img_alien.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
+        for bombaVetor in bombaVetores:
+            for bomba in bombaVetor:  
+                if bomba.explosao: # colisao com a explosao
+                    for rect in bomba.explosoes:
+                        if rect.colliderect(self.colisao):
+                            if timeAtt - self.time_inalvejavel > 5:
+                                self.time_inalvejavel = timeAtt
+                                self.vida -= 1
+                                if self.vida == 0:
+                                    inimigos.remove(self)
+                                else:
+                                    self.setX(ConfigJogo.QUARTEL_X)
+                                    self.setY(ConfigJogo.QUARTEL_Y)
+
+
         if time.time() - self._time_last_shot >= ConfigJogo.CD_SHOT_ALIEN:
             self.atira()
             self._time_last_shot = time.time()

@@ -38,7 +38,7 @@ class CenaPrincipal():
         while not self.encerrada:
             self.mapa.desenha(self.tela)
             
-            self.quartel.desenha()
+            self.quartel.desenha(self.bombas)
             self.quartel.tratamento_eventos()
 
             """
@@ -197,9 +197,6 @@ class CenaPrincipal():
                     self.p2.colisao = self.p2.personagem.get_rect(topleft=(new_p2x, new_p2y))
 
                     self.p2._time_last_move = time.time()
-
-            #if pygame.key.get_pressed()[pygame.K_0]:
-            #    self.soltar_bomba()
 
     def desenha_menu(self):
         pygame.draw.rect(self.tela, ConfigJogo.COR_HUD, (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU))
