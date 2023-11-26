@@ -8,7 +8,6 @@ from time import time
 class Jogo:
     def __init__(self):
         pygame.init()
-
         self.tela = pygame.display.set_mode((ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_TELA))
         self.bombas = [[],[]]
         self.projeteis = []
@@ -24,8 +23,19 @@ class Jogo:
             self.bombas[0] = cena_principal.p1.bombas
             self.bombas[1] = cena_principal.p2.bombas
             self.projeteis = cena_principal.alien.projeteis
-""" 
-            
+"""
+            for bomba in cena_principal.p1.bombas:
+                if len(self.bombas[0]) < 4:  # Limit to 4 bombs per player
+                    self.bombas[0].append(bomba)
+
+            if cena_principal.p2:
+                for bomba in cena_principal.p2.bombas:
+                    if len(self.bombas[1]) < 4:
+                        self.bombas[1].append(bomba)
+                
+
+
+
             #cenaFinal = CenaWin(self.tela, cenaPrincipal)
             #cenaFinal.rodar()
 """

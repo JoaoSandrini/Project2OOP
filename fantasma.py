@@ -52,7 +52,3 @@ class Fantasma:
                 self._time_last_move = time.time()
             else:
                 self._idx_movimento = random.randint(0, 3)
-
-
-            
-

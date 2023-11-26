@@ -1,29 +1,26 @@
 import sys
-from time import time 
+import time
 from typing import Tuple
 from mapa import Mapa, TileType
 from personagem import Personagem
-import pygame
-from utils import ler_imagem
-from cronometro import Cronometro
 from fantasma import Fantasma
-from config_jogo import ConfigJogo
 from alienigena import Aienigena
+import pygame
+from cronometro import Cronometro
+from config_jogo import ConfigJogo
+from utils import ler_imagem
+
 class CenaPrincipal():
     def __init__(self, tela: pygame.display, num_jogadores: int):
-
         self.mapa = Mapa()
         self.tela = tela
         self.encerrada = False
-
-        self.fantasma = Fantasma(self.mapa, self.tela)
         self.alien = Aienigena(self.mapa, self.tela)
-        
+        self.fantasma = Fantasma(self.mapa, self.tela)
         self.cronometro = Cronometro()
 
-        self.fonte_hud = pygame.font.SysFont(None, ConfigJogo.FONTE_SUBTITULO)
         self.img_relogio = ler_imagem('telas/relogio.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
-
+        
         if num_jogadores == 1:
             self.p1 = Personagem(self.mapa, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU, self.tela)
             self.p2 = False
@@ -33,48 +30,121 @@ class CenaPrincipal():
             self.p2 = Personagem(self.mapa, (ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE), (ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE), self.tela)
             while(self.p1.pIdx == self.p2.pIdx):
                 self.p2 = Personagem(self.mapa, (ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE), (ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE), self.tela)
-
+                
     def rodar(self):
         while not self.encerrada:
             self.desenha_menu()
             self.mapa.desenha(self.tela)
 
+            self.alien.desenha()
+            self.alien.tratamento_eventos()
+
             self.fantasma.desenha()
             self.fantasma.tratamento_eventos()
 
-            self.alien.desenha()
-            self.alien.tratamento_eventos()
-            
+            self.p1.desenha()
+            if self.p2!=False:
+                self.p2.desenha()
+
             for projetil in self.alien.projeteis:
                 projetil.desenha(self.tela)
                 projetil.tratamento_eventos()
                 if projetil.colidido:
                     self.alien.projeteis.remove(projetil)
 
-            self.p1.tratamento_eventos(1) 
             self.tratamento_eventos()
-            self.p1.desenha()
 
-            if self.p2:
-                self.p2.tratamento_eventos(2)
-                self.p2.desenha()     
 
-            
             for bomba in self.p1.bombas:
-                bomba.desenha(self.tela)
-
+                bomba.desenha(self.tela, self.mapa)
             if self.p2:
                 for bomba in self.p2.bombas:
-                    bomba.desenha(self.tela)
+                    bomba.desenha(self.tela, self.mapa)
        
             pygame.display.flip()
 
-    def tratamento_eventos(self):
-        pygame.event.get()
-
+    def tratamento_eventos(self):            
         # evento de saida
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
             sys.exit(0)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.p1.soltar_bomba()
+                if event.key == pygame.K_0 and self.p2:
+                    self.p2.soltar_bomba()
+
+        if self.p1 and time.time() - self.p1._time_last_move > 0.01:
+            new_p1x = self.p1.getX()
+            new_p1y = self.p1.getY()
+        
+            if pygame.key.get_pressed()[pygame.K_a]:
+                new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+            if pygame.key.get_pressed()[pygame.K_d]:
+                new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
+            if pygame.key.get_pressed()[pygame.K_s]:
+                #print(self.p1.getX()%ConfigJogo.TAM_TILE)
+                #if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0:
+                 #   new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                #else:
+                new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
+            if pygame.key.get_pressed()[pygame.K_w]:
+                new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
+            
+            if not self.p1._mapa.is_any_wall(new_p1x, new_p1y):
+                bombaColisao = False
+                for bomba in self.p1.bombas:
+                    if not bomba.explosao and not self.p1.colisao.colliderect(bomba.colisao): #Para não colidir após colocar a bomba
+                        bomba_tile = (bomba.getX() // ConfigJogo.TAM_TILE, bomba.getY() // ConfigJogo.TAM_TILE)
+                        new_p1_tile_left = (new_p1x // ConfigJogo.TAM_TILE, new_p1y // ConfigJogo.TAM_TILE)
+                        new_p1_tile_right = ((new_p1x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE, new_p1y // ConfigJogo.TAM_TILE)
+                        new_p1_tile_down = (new_p1x // ConfigJogo.TAM_TILE, (new_p1y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE)
+
+                        if bomba_tile in [new_p1_tile_left, new_p1_tile_right, new_p1_tile_down]:
+                            bombaColisao = True
+
+                if not bombaColisao:
+                    self.p1.setX(new_p1x)
+                    self.p1.setY(new_p1y)
+                    self.p1.colisao = self.p1.personagem.get_rect(topleft=(new_p1x, new_p1y))
+
+                    self.p1._time_last_move = time.time()
+
+        if self.p2 and time.time() - self.p2._time_last_move > 0.01: 
+            new_p2x = self.p2.getX()
+            new_p2y = self.p2.getY()
+
+            if pygame.key.get_pressed()[pygame.K_LEFT]:
+                new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+            if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                new_p2x = self.p2.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
+            if pygame.key.get_pressed()[pygame.K_DOWN]:
+                new_p2y = self.p2.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
+            if pygame.key.get_pressed()[pygame.K_UP]:
+                new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
+            
+            if not self.p2._mapa.is_any_wall(new_p2x, new_p2y):
+                bombaColisao = False
+                for bomba in self.p2.bombas:
+                    if not bomba.explosao and not self.p2.colisao.colliderect(bomba.colisao): #Para não colidir após colocar a bomba
+                        bomba_tile = (bomba.getX() // ConfigJogo.TAM_TILE, bomba.getY() // ConfigJogo.TAM_TILE)
+                        new_p2_tile_left = (new_p2x // ConfigJogo.TAM_TILE, new_p2y // ConfigJogo.TAM_TILE)
+                        new_p2_tile_right = ((new_p2x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE, new_p2y // ConfigJogo.TAM_TILE)
+                        new_p2_tile_down = (new_p2x // ConfigJogo.TAM_TILE, (new_p2y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE)
+
+                        if bomba_tile in [new_p2_tile_left, new_p2_tile_right, new_p2_tile_down]:
+                            bombaColisao = True
+
+                if not bombaColisao:
+                    self.p2.setX(new_p2x)
+                    self.p2.setY(new_p2y)
+                    self.p2.colisao = self.p2.personagem.get_rect(topleft=(new_p2x, new_p2y))
+
+                    self.p2._time_last_move = time.time()
+
+            #if pygame.key.get_pressed()[pygame.K_0]:
+            #    self.soltar_bomba()
 
     def desenha_menu(self):
         pygame.draw.rect(self.tela, 'blue', (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU))
@@ -111,3 +181,4 @@ class CenaPrincipal():
 
             self.tela.blit(self.p1.personagem, (ConfigJogo.LARGURA_TELA * .5, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
             self.tela.blit(self.p2.personagem, (ConfigJogo.LARGURA_TELA * .75, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
+
