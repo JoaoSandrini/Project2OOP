@@ -34,7 +34,6 @@ class CenaPrincipal():
                 
     def rodar(self):
         while not self.encerrada:
-            self.desenha_menu()
             self.mapa.desenha(self.tela)
             
             self.quartel.desenha()
@@ -64,6 +63,8 @@ class CenaPrincipal():
             if self.p2:
                 for bomba in self.p2.bombas:
                     bomba.desenha(self.tela, self.mapa)
+            
+            self.desenha_menu()
        
             pygame.display.flip()
 
