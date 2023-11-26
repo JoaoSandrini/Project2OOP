@@ -1,10 +1,8 @@
 import sys
 import time
 from typing import Tuple
-from mapa import Mapa, TileType
+from mapa import Mapa
 from personagem import Personagem
-from fantasma import Fantasma
-from alienigena import Aienigena
 import pygame
 from cronometro import Cronometro
 from config_jogo import ConfigJogo
@@ -18,7 +16,7 @@ class CenaPrincipal():
         self.tela = tela
         self.encerrada = False
         self.inimigos = []
-        self.quartel = Quartel()
+        self.quartel = Quartel(self.mapa, self.tela)
         self.cronometro = Cronometro()
         
         self._time_last_spawn = 0
@@ -39,21 +37,10 @@ class CenaPrincipal():
             self.desenha_menu()
             self.mapa.desenha(self.tela)
             
-            self.quartel.desenha(self.tela)
+            self.quartel.desenha()
+            self.quartel.tratamento_eventos()
 
-            for inimigo in self.inimigos:
-                if type(inimigo) == Fantasma:
-                    inimigo.desenha()
-                    inimigo.tratamento_eventos()
-                else:
-                    for projetil in inimigo.projeteis:
-                        projetil.desenha(self.tela)
-                        projetil.tratamento_eventos()
-                        if projetil.colidido:
-                            inimigo.projeteis.remove(projetil)
-                    inimigo.desenha()
-                    inimigo.tratamento_eventos()
-                """
+            """
                 if inimigo.colidido:
                     self.inimigos.remove(inimigo)
 
@@ -91,14 +78,6 @@ class CenaPrincipal():
                     self.p1.soltar_bomba()
                 if event.key == pygame.K_0 and self.p2:
                     self.p2.soltar_bomba()
-
-        if  time.time() - self._time_last_spawn > 2:
-            rand = random.randint(0, 1)
-            if rand == 0:
-                self.inimigos.append(Fantasma(self.mapa, self.tela))
-            elif rand == 1:
-                self.inimigos.append(Aienigena(self.mapa, self.tela))
-            self._time_last_spawn = time.time()
 
         if self.p1 and time.time() - self.p1._time_last_move > 0.01:
             new_p1x = self.p1.getX()
