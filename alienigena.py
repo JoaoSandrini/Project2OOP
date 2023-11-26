@@ -34,7 +34,9 @@ class Alienigena:
         self.tela.blit(self.img_alien, (self._x, self._y))
 
     def tratamento_eventos(self, bombaVetores, inimigos):
+        bombaColisao = False
         timeAtt = time.time()
+
         self.colisao = self.img_alien.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
         for bombaVetor in bombaVetores:
             for bomba in bombaVetor:  
@@ -50,15 +52,18 @@ class Alienigena:
                                     self.setX(ConfigJogo.QUARTEL_X)
                                     self.setY(ConfigJogo.QUARTEL_Y)
 
-
         if time.time() - self._time_last_shot >= ConfigJogo.CD_SHOT_ALIEN:
             self.atira()
             self._time_last_shot = time.time()
 
         if time.time() - self._time_last_move > ConfigJogo.CD_ALIEN:
-
             new_x = self._x
             new_y = self._y
+
+            for bombaVetor in bombaVetores:
+                for bomba in bombaVetor:
+                    if bomba.colisao.colliderect(self.colisao):
+                        bombaColisao = True
 
             if self._idx_movimento == Direcao.ESQUERDA.value:
                 new_x -= ConfigJogo.VELOCIDADE_ALIEN
@@ -69,7 +74,7 @@ class Alienigena:
             elif self._idx_movimento == Direcao.CIMA.value:
                 new_y -= ConfigJogo.VELOCIDADE_ALIEN
 
-            if not self._mapa.is_any_wall(new_x, new_y):
+            if not self._mapa.is_any_wall(new_x, new_y) and not bombaColisao:
                 self._x = new_x
                 self._y = new_y
                 self._time_last_move = time.time()
