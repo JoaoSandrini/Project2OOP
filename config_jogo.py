@@ -38,4 +38,5 @@ class ConfigJogo:
     ESPESSURA_AURA = 5
     VIDA_PERSONAGEM = 3
     VIDA_INIMIGO = 1
+    ORIGEM = (0, 0)
 
