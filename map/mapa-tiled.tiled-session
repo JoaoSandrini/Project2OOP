@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapaBomberman.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
-        "map",
-        "."
+        ".",
+        "map"
     ],
     "fileStates": {
         "Bombermantiles.tsx": {
