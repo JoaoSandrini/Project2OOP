@@ -22,7 +22,7 @@ class ConfigJogo:
     CD_FANTASMA = 0.01
     CD_PERSONAGEM = 0.01
     COR_AURA = (128, 128, 128, 128)
-    RAIO_AURA = TAM_TILE * 10 + TAM_TILE/2
+    RAIO_AURA = TAM_TILE * 3 + TAM_TILE/2
     CD_ALIEN = 0.01
     CD_SHOT_ALIEN = 2
     CD_SHOT_MOVE = 0.01
@@ -40,4 +40,5 @@ class ConfigJogo:
     VIDA_PERSONAGEM = 1000000
     VIDA_INIMIGO = 1
     ORIGEM = (0, 0)
+    COEFICIENTE_AURA = 3
 

@@ -55,3 +55,9 @@ class Personagem:
     
     def setY(self, y):
         self._y = y
+
+    def get_cooldown(self):
+        return self.cd
+    
+    def set_cooldown(self, cd):
+        self.cd = cd

@@ -11,7 +11,9 @@ from utils import ler_imagem
 from quartel import Quartel
 import random
 from pygame import gfxdraw
-
+from fantasma import Fantasma
+import math
+import numpy as np
 
 
 class CenaPrincipal():
@@ -23,6 +25,9 @@ class CenaPrincipal():
         self.quartel = Quartel(self.mapa, self.tela)
         self.cronometro = Cronometro()
         self.bombas = bombas
+        self.cd_personagem = ConfigJogo.CD_PERSONAGEM
+        self.cooldown_adjusted = False
+        self.closest_ghost_type = None
         
         self._time_last_spawn = 0
         self.img_relogio = ler_imagem('telas/relogio.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
@@ -40,6 +45,7 @@ class CenaPrincipal():
     def rodar(self):
         while not self.encerrada:
             self.mapa.desenha(self.tela)
+            
             """
                 if inimigo.colidido:
                     self.inimigos.remove(inimigo)
@@ -79,7 +85,37 @@ class CenaPrincipal():
         # evento de saida
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
             sys.exit(0)
-        
+            
+        if len(self.quartel.fantasmas) > 0:
+            ghost_positions = np.array([(float(inimigo.getX()), float(inimigo.getY()), inimigo.get_tipo_aura()) for inimigo in self.quartel.fantasmas])
+            ghost_positions = np.atleast_2d(ghost_positions)
+            distances = np.sqrt((self.p1.getX() - ghost_positions[:, 0])**2 + (self.p1.getY() - ghost_positions[:, 1])**2)
+            closest_ghost_index = np.argmin(distances)
+
+            # Check if the character is currently within a ghost aura and the adjustment has not been made yet
+            if distances[closest_ghost_index] <= ConfigJogo.RAIO_AURA:
+                closest_ghost_type_aura = ghost_positions[closest_ghost_index, 2]
+
+                # Check if the closest ghost or aura type has changed
+                if not self.cooldown_adjusted or self.closest_ghost_type != closest_ghost_type_aura:
+                    if closest_ghost_type_aura == 0:
+                        self.cd_personagem = self.cd_personagem * ConfigJogo.COEFICIENTE_AURA
+                    elif closest_ghost_type_aura == 1:
+                        self.cd_personagem = self.cd_personagem / ConfigJogo.COEFICIENTE_AURA
+
+                    # Set the flag to indicate that the adjustment has been made
+                    self.cooldown_adjusted = True
+                    self.closest_ghost_type = closest_ghost_type_aura
+
+            # Check if the character is outside the ghost aura, reset the flag
+            elif distances[closest_ghost_index] > ConfigJogo.RAIO_AURA:
+                self.cooldown_adjusted = False
+                self.cd_personagem = ConfigJogo.CD_PERSONAGEM
+        else:
+            # Handle the case when there are no ghosts
+            self.cooldown_adjusted = False
+            self.cd_personagem = ConfigJogo.CD_PERSONAGEM
+
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -87,7 +123,7 @@ class CenaPrincipal():
                 if event.key == pygame.K_0 and self.p2:
                     self.p2.soltar_bomba(self.bombas, 2)
 
-        if self.p1 and tempo - self.p1._time_last_move > 0.01:
+        if self.p1 and tempo - self.p1._time_last_move > self.cd_personagem:
             if tempo - self.p1.time_inalvejavel < 5:
                 if ((tempo - self.p1.time_inalvejavel) % 0.5) < 0.25:
                     self.p1.personagem.set_alpha(100)
@@ -106,6 +142,7 @@ class CenaPrincipal():
                     new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
                 else:
                     new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                                
             if pygame.key.get_pressed()[pygame.K_d]:
                 if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
                     new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -113,6 +150,7 @@ class CenaPrincipal():
                     new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
                 else:
                     new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                        
             if pygame.key.get_pressed()[pygame.K_s]:
                 if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
                    new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -120,6 +158,7 @@ class CenaPrincipal():
                     new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
                 else:
                     new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
+
             if pygame.key.get_pressed()[pygame.K_w]:
                 if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
                    new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -218,6 +257,7 @@ class CenaPrincipal():
 
                     self.p2._time_last_move = time.time()
 
+
     def desenha_menu(self):
         pygame.draw.rect(self.tela, ConfigJogo.COR_HUD, (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU))
         pygame.draw.rect(self.tela, ConfigJogo.COR_BORDA_HUD, (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU), 4)
@@ -253,3 +293,34 @@ class CenaPrincipal():
 
             self.tela.blit(self.p1.personagem, (ConfigJogo.LARGURA_TELA * .5, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
             self.tela.blit(self.p2.personagem, (ConfigJogo.LARGURA_TELA * .75, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
+
+    def verifica_aura(self, personagem: Personagem):
+        if len(self.quartel.fantasmas) > 0:
+            ghost_positions = np.array([(float(inimigo.getX()), float(inimigo.getY()), inimigo.get_tipo_aura()) for inimigo in self.quartel.fantasmas])
+            ghost_positions = np.atleast_2d(ghost_positions)
+            distances = np.sqrt((self.p1.getX() - ghost_positions[:, 0])**2 + (self.p1.getY() - ghost_positions[:, 1])**2)
+            closest_ghost_index = np.argmin(distances)
+
+            # Check if the character is currently within a ghost aura and the adjustment has not been made yet
+            if distances[closest_ghost_index] <= ConfigJogo.RAIO_AURA:
+                closest_ghost_type_aura = ghost_positions[closest_ghost_index, 2]
+
+                # Check if the closest ghost or aura type has changed
+                if not self.cooldown_adjusted or self.closest_ghost_type != closest_ghost_type_aura:
+                    if closest_ghost_type_aura == 0:
+                        self.cd_personagem = self.cd_personagem * ConfigJogo.COEFICIENTE_AURA
+                    elif closest_ghost_type_aura == 1:
+                        self.cd_personagem = self.cd_personagem / ConfigJogo.COEFICIENTE_AURA
+
+                    # Set the flag to indicate that the adjustment has been made
+                    self.cooldown_adjusted = True
+                    self.closest_ghost_type = closest_ghost_type_aura
+
+            # Check if the character is outside the ghost aura, reset the flag
+            elif distances[closest_ghost_index] > ConfigJogo.RAIO_AURA:
+                self.cooldown_adjusted = False
+                self.cd_personagem = ConfigJogo.CD_PERSONAGEM
+        else:
+            # Handle the case when there are no ghosts
+            self.cooldown_adjusted = False
+            self.cd_personagem = ConfigJogo.CD_PERSONAGEM
