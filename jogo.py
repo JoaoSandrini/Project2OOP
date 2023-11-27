@@ -2,8 +2,6 @@ import pygame
 from config_jogo import ConfigJogo
 from cena_inicial import CenaInicial
 from cena_principal import CenaPrincipal
-from bomba import Bomba
-from time import time
 
 class Jogo:
     def __init__(self):

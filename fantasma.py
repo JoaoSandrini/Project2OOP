@@ -1,6 +1,5 @@
 import pygame
 import random
-from bomba import Bomba
 from mapa import Mapa
 from config_jogo import ConfigJogo
 from utils import ler_imagem
