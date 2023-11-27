@@ -56,3 +56,6 @@ class Quartel:
                         inimigo.projeteis.remove(projetil)
                 inimigo.desenha()
                 inimigo.tratamento_eventos(bombaVetores, self.inimigos)
+
+    def getInimigos(self):
+        return self.inimigos

@@ -7,13 +7,12 @@ from utils import ler_imagem
 from bomba import Bomba
 
 class Personagem:
-    def __init__(self, mapa: Mapa, x: int, y: int,  tela: pygame.Surface) -> None:
+    def __init__(self, mapa: Mapa, x: int, y: int,  tela: pygame.Surface, quartel) -> None:
         self._bomberman_b = ler_imagem('chars/bomberman-white.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
         self._bomberman_l = ler_imagem('chars/bomberman-orange.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
         self._bomberman_p = ler_imagem('chars/bomberman-black.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
         self._bomberman_a = ler_imagem('chars/bomberman-blue.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
         self._sprites = [self._bomberman_a, self._bomberman_b, self._bomberman_l, self._bomberman_p]
-
         self.pIdx = random.randint(0, 3)
         self.personagem = self._sprites[self.pIdx]
         self._mapa = mapa
@@ -22,6 +21,7 @@ class Personagem:
         self.pontos = 0
         self.colisao = self.personagem.get_rect(topleft=(self._x, self._y))
         self.inalvejavel = True
+        self.quartel = quartel
         
         self.vida = ConfigJogo.VIDA_PERSONAGEM
 
@@ -36,7 +36,7 @@ class Personagem:
 
     def soltar_bomba(self, bombasVetor, player):
         if len(self.bombas) < ConfigJogo.MAX_BOMBA:
-            bomba = Bomba(self, self._x+ConfigJogo.TAM_TILE/2, self._y+ConfigJogo.TAM_TILE/2)
+            bomba = Bomba(self, self._x+ConfigJogo.TAM_TILE/2, self._y+ConfigJogo.TAM_TILE/2, self.quartel)
             if bomba.verificar():
                 self.bombas.append(bomba)
                 if player == 1:
