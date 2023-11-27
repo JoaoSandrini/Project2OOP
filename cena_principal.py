@@ -37,10 +37,6 @@ class CenaPrincipal():
     def rodar(self):
         while not self.encerrada:
             self.mapa.desenha(self.tela)
-            
-            self.quartel.desenha(self.bombas)
-            self.quartel.tratamento_eventos()
-
             """
                 if inimigo.colidido:
                     self.inimigos.remove(inimigo)
@@ -53,19 +49,19 @@ class CenaPrincipal():
                     self.alien.projeteis.remove(projetil)
                     """
 
-            self.p1.desenha()
-            if self.p2!=False:
-                self.p2.desenha()
-
-            self.tratamento_eventos()
-
-
             for bomba in self.p1.bombas:
                 bomba.desenha(self.tela, self.mapa, self.bombas)
             if self.p2:
                 for bomba in self.p2.bombas:
                     bomba.desenha(self.tela, self.mapa, self.bombas)
             
+            self.p1.desenha()
+            if self.p2!=False:
+                self.p2.desenha()
+
+            self.quartel.desenha(self.bombas)
+            self.quartel.tratamento_eventos()
+            self.tratamento_eventos()
             self.desenha_menu()
        
             pygame.display.flip()

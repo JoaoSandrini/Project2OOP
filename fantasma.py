@@ -21,8 +21,8 @@ class Fantasma:
         self._x = ConfigJogo.QUARTEL_X
         self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
-        self.time_inalvejavel = time.time()
-        self.colisao = self.img_fantasma.get_rect(topleft=(self._x, self._y))
+        self.time_inalvejavel = 6
+        self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
         
         self.tela = tela
 
@@ -37,7 +37,9 @@ class Fantasma:
 
     def tratamento_eventos(self, bombaVetores, inimigos):
         timeAtt = time.time()
-        self.colisao = self.img_fantasma.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
+        self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+        pygame.draw.rect(self.tela, (0,255,255), self.colisao)
+        
         for bombaVetor in bombaVetores:
             for bomba in bombaVetor:  
                 if bomba.explosao: # colisao com a explosao
@@ -51,8 +53,6 @@ class Fantasma:
                                 else:
                                     self.setX(ConfigJogo.QUARTEL_X)
                                     self.setY(ConfigJogo.QUARTEL_Y)
-
-
 
         if time.time() - self._time_last_move > ConfigJogo.CD_FANTASMA:
 

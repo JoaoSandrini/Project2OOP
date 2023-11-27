@@ -15,14 +15,14 @@ class Direcao(Enum):
 class Alienigena:
     def __init__(self, mapa: Mapa, tela: pygame.Surface) -> None:
         self.img_alien= ler_imagem('enemies/enemy-alien.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
-        self.time_inalvejavel = time.time()
+        self.time_inalvejavel = 6
         self.vida = ConfigJogo.VIDA_INIMIGO
         self._mapa = mapa
         self._x = ConfigJogo.QUARTEL_X
         self._y = ConfigJogo.QUARTEL_Y
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
         
-        self.colisao = self.img_alien.get_rect(topleft=(self._x, self._y))
+        self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
         self.tela = tela
 
         self._time_last_move = 0
@@ -34,14 +34,17 @@ class Alienigena:
         self.tela.blit(self.img_alien, (self._x, self._y))
 
     def tratamento_eventos(self, bombaVetores, inimigos):
+        self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+        pygame.draw.rect(self.tela, (255,255,0), self.colisao)
+
         bombaColisao = False
         timeAtt = time.time()
 
-        self.colisao = self.img_alien.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
         for bombaVetor in bombaVetores:
             for bomba in bombaVetor:  
                 if bomba.explosao: # colisao com a explosao
                     for rect in bomba.explosoes:
+                        pygame.draw.rect(self.tela, (255,0,0), rect)
                         if rect.colliderect(self.colisao):
                             if timeAtt - self.time_inalvejavel > 5:
                                 self.time_inalvejavel = timeAtt
