@@ -16,7 +16,8 @@ class Quartel:
         self._time_last_spawn = 0
         self.mapa = mapa
         self.tela = tela
-        
+        self.time_inalvejavel = 0
+
     def tratamento_eventos(self, bombaVetores):
         timeAtt = time.time()
         self.colisao = self.img_quartel.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
@@ -25,14 +26,13 @@ class Quartel:
                 if bomba.explosao: # colisao com a explosao
                     for rect in bomba.explosoes:
                         if rect.colliderect(self.colisao):
-                            if timeAtt - self.time_inalvejavel > 5:
+                            if timeAtt - self.time_inalvejavel > 0.5:
                                 self.time_inalvejavel = timeAtt
-                                self.vida -= 1
-                                if self.vida == 0:
-                                    inimigos.remove(self)
-                                else:
-                                    self.setX(ConfigJogo.QUARTEL_X)
-                                    self.setY(ConfigJogo.QUARTEL_Y)
+                                self._vida -= 1
+                                print(self._vida)
+                                if self._vida == 0:
+                                    pass
+
 
         if  time.time() - self._time_last_spawn > 2:
             rand = random.randint(0, 1)
