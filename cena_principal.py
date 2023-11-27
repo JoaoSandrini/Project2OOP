@@ -60,7 +60,7 @@ class CenaPrincipal():
                 self.p2.desenha()
 
             self.quartel.desenha(self.bombas)
-            self.quartel.tratamento_eventos()
+            self.quartel.tratamento_eventos(self.bombas)
             self.tratamento_eventos()
             self.desenha_menu()
        

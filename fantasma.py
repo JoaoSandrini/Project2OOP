@@ -36,15 +36,23 @@ class Fantasma:
 
     def tratamento_eventos(self, bombaVetores, inimigos):
         timeAtt = time.time()
+
+        if timeAtt - self.time_inalvejavel < 2:
+            if ((timeAtt - self.time_inalvejavel) % 0.5) < 0.25:
+                self.img_fantasma.set_alpha(100)
+            else:
+                    self.img_fantasma.set_alpha(190)
+        else:
+                self.img_fantasma.set_alpha(255)
+
         self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
-        pygame.draw.rect(self.tela, (0,255,255), self.colisao)
         
         for bombaVetor in bombaVetores:
             for bomba in bombaVetor:  
                 if bomba.explosao: # colisao com a explosao
                     for rect in bomba.explosoes:
                         if rect.colliderect(self.colisao):
-                            if timeAtt - self.time_inalvejavel > 5:
+                            if timeAtt - self.time_inalvejavel > 2:
                                 self.time_inalvejavel = timeAtt
                                 self.vida -= 1
                                 if self.vida == 0:

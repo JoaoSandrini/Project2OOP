@@ -35,7 +35,6 @@ class Alienigena:
 
     def tratamento_eventos(self, bombaVetores, inimigos):
         self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
-        pygame.draw.rect(self.tela, (255,255,0), self.colisao)
 
         bombaColisao = False
         timeAtt = time.time()
@@ -44,9 +43,8 @@ class Alienigena:
             for bomba in bombaVetor:  
                 if bomba.explosao: # colisao com a explosao
                     for rect in bomba.explosoes:
-                        pygame.draw.rect(self.tela, (255,0,0), rect)
                         if rect.colliderect(self.colisao):
-                            if timeAtt - self.time_inalvejavel > 5:
+                            if timeAtt - self.time_inalvejavel > 2:
                                 self.time_inalvejavel = timeAtt
                                 self.vida -= 1
                                 if self.vida == 0:
