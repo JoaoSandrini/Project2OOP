@@ -56,3 +56,28 @@ class Quartel:
                         inimigo.projeteis.remove(projetil)
                 inimigo.desenha()
                 inimigo.tratamento_eventos(bombaVetores, self.inimigos)
+
+    def getInimigos(self):
+        return self.inimigos
+    
+    def testInimigos(self):
+        al1 = Alienigena(self.mapa, self.tela)
+        al1.setX(400)
+        al1.setY(200)
+        self.inimigos.append(al1)
+
+        al2 = Alienigena(self.mapa, self.tela)
+        al2.setX(150)
+        al2.setY(100)
+        self.inimigos.append(al2)
+
+        al1 = Alienigena(self.mapa, self.tela)
+        al1.setX(100)
+        al1.setY(200)
+        self.inimigos.append(al1)
+
+        al1 = Alienigena(self.mapa, self.tela)
+        al1.setX(150)
+        al1.setY(400)
+        self.inimigos.append(al1)
+        
