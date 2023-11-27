@@ -25,6 +25,8 @@ class Alienigena:
         self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
         self.tela = tela
 
+        self.bombaColisao = False
+
         self._time_last_move = 0
         self._time_last_shot = 0
 
@@ -35,8 +37,6 @@ class Alienigena:
 
     def tratamento_eventos(self, bombaVetores, inimigos):
         self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
-
-        bombaColisao = False
         timeAtt = time.time()
 
         for bombaVetor in bombaVetores:
@@ -60,11 +60,6 @@ class Alienigena:
         if time.time() - self._time_last_move > ConfigJogo.CD_ALIEN:
             new_x = self._x
             new_y = self._y
-
-            for bombaVetor in bombaVetores:
-                for bomba in bombaVetor:
-                    if bomba.colisao.colliderect(self.colisao):
-                        bombaColisao = True
             
             if self._idx_movimento == Direcao.ESQUERDA.value:
                 new_x -= ConfigJogo.VELOCIDADE_ALIEN
@@ -75,12 +70,21 @@ class Alienigena:
             elif self._idx_movimento == Direcao.CIMA.value:
                 new_y -= ConfigJogo.VELOCIDADE_ALIEN
 
-            if not self._mapa.is_any_wall(new_x, new_y) and not bombaColisao:
+            for bombaVetor in bombaVetores:
+                for bomba in bombaVetor:
+                    colisaoFutura = self.colisao.copy()
+                    colisaoFutura.x = new_x
+                    colisaoFutura.y = new_y
+                    if bomba.colisao.colliderect(colisaoFutura):
+                        self.bombaColisao = True
+
+            if not self._mapa.is_any_wall(new_x, new_y) and not self.bombaColisao:
                 self._x = new_x
                 self._y = new_y
                 self._time_last_move = time.time()
             else:
                 self._idx_movimento = random.randint(0, 3)
+                self.bombaColisao = False
 
         
     def atira(self):

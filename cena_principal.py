@@ -59,7 +59,6 @@ class CenaPrincipal():
                     """
 
             for bomba in self.p1.bombas:
-                print(self.p1.colisao)
                 bomba.desenha(self.tela, self.mapa, self.bombas, self.p1.colisao, self.p1.colisao)
             if self.p2:
                 for bomba in self.p2.bombas:
