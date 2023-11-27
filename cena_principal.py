@@ -29,7 +29,7 @@ class CenaPrincipal():
 
         if num_jogadores == 1:
             self.p1 = Personagem(self.mapa, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU, self.tela, self.quartel)
-            self.p2 = False
+            self.p2: Personagem = False
         else:
             self.p1 = Personagem(self.mapa, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU, self.tela, self.quartel)
 
@@ -53,13 +53,14 @@ class CenaPrincipal():
                     """
 
             for bomba in self.p1.bombas:
-                bomba.desenha(self.tela, self.mapa, self.bombas)
+                print(self.p1.colisao)
+                bomba.desenha(self.tela, self.mapa, self.bombas, self.p1.colisao, self.p1.colisao)
             if self.p2:
                 for bomba in self.p2.bombas:
-                    bomba.desenha(self.tela, self.mapa, self.bombas)
+                    bomba.desenha(self.tela, self.mapa, self.bombas, self.p1.colisao, self.p2.colisao)
             
             self.p1.desenha()
-            if self.p2!=False:
+            if self.p2:
                 self.p2.desenha()
 
             if ConfigJogo.INIMIGOS:

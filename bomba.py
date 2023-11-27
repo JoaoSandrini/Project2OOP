@@ -25,27 +25,45 @@ class Bomba:
         self.tempoDaExplosao = 0
         self.inimigos = []
         self.quartel = quartel
+        self.alcanceXP = self.alcance+1
+        self.alcanceXN = self.alcance+1
+        self.alcanceYP = self.alcance+1
+        self.alcanceYN = self.alcance+1
+        self.primeiraColisaoXP = False
+        self.primeiraColisaoXN = False
+        self.primeiraColisaoYP = False
+        self.primeiraColisaoYN = False
 
-    def explodir(self, tela: pygame.Surface, mapa: Mapa):
+    def explodir(self, tela: pygame.Surface, mapa: Mapa, p1, p2):
         if self.explosao:
-            for i in range(self.alcance+1): #X POS
+            for i in range(self.alcanceXP): #X POS
                 tileType = mapa.destrutivel(self._x+i*ConfigJogo.TAM_TILE, self._y)
+                colisaoExplosao = pygame.Rect(self._x+i*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                if not self.primeiraColisaoXP:
+                    for inimigo in self.inimigos:
+                        if colisaoExplosao.colliderect(inimigo.colisao) or colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
+                            self.alcanceXP = i+1
+                            self.primeiraColisaoXP = True
+                            break
                 if tileType == TileType.DESTRUTIVEL_C.value or tileType == TileType.FIXA.value:
-                    col = int((self._x+(i)*ConfigJogo.TAM_TILE)//ConfigJogo.TAM_TILE)
+                    col = int((self._x+i*ConfigJogo.TAM_TILE)//ConfigJogo.TAM_TILE)
                     lin = int((self._y - ConfigJogo.ALTURA_MENU)//ConfigJogo.TAM_TILE)
                     if tileType == TileType.DESTRUTIVEL_C.value:
                         self.pos.append([lin, col])
                     break
                 else:
                     tela.blit(self.img_explosao, (self._x+i*ConfigJogo.TAM_TILE, self._y))
-                    colisaoExplosao = pygame.Rect(self._x+(i)*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
                     self.explosoes.append(colisaoExplosao)
-                    for inimigo in self.inimigos:
-                        if colisaoExplosao.colliderect(inimigo.colisao):
-                            break
 
-            for i in range(self.alcance+1): #X NEG
+            for i in range(self.alcanceXN): #X NEG
                 tileType = mapa.destrutivel(self._x-i*ConfigJogo.TAM_TILE, self._y)
+                colisaoExplosao = pygame.Rect(self._x-i*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                if not self.primeiraColisaoXN:
+                    for inimigo in self.inimigos:
+                        if colisaoExplosao.colliderect(inimigo.colisao) or colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
+                            self.alcanceXN = i+1
+                            self.primeiraColisaoXN = True
+                            break
                 if tileType == TileType.DESTRUTIVEL_C.value or tileType == TileType.FIXA.value:
                     col = int((self._x-(i)*ConfigJogo.TAM_TILE)//ConfigJogo.TAM_TILE)
                     lin = int((self._y - ConfigJogo.ALTURA_MENU)//ConfigJogo.TAM_TILE)
@@ -54,14 +72,17 @@ class Bomba:
                     break
                 else:
                     tela.blit(self.img_explosao, (self._x-i*ConfigJogo.TAM_TILE, self._y))
-                    colisaoExplosao = pygame.Rect(self._x-i*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
                     self.explosoes.append(colisaoExplosao)
-                for inimigo in self.inimigos:
-                    if colisaoExplosao.colliderect(inimigo.colisao):
-                        return
 
-            for i in range(self.alcance+1): #Y POS
+            for i in range(self.alcanceYP): #Y POS
                 tileType = mapa.destrutivel(self._x, self._y+i*ConfigJogo.TAM_TILE)
+                colisaoExplosao = pygame.Rect(self._x, self._y+i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                if not self.primeiraColisaoYP:
+                    for inimigo in self.inimigos:
+                        if colisaoExplosao.colliderect(inimigo.colisao) or colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
+                            self.alcanceYP = i+1
+                            self.primeiraColisaoYP = True
+                            break
                 if tileType == TileType.DESTRUTIVEL_C.value or tileType == TileType.FIXA.value:
                     col = int((self._x)//ConfigJogo.TAM_TILE)
                     lin = int(((self._y+(i)*ConfigJogo.TAM_TILE) - ConfigJogo.ALTURA_MENU) //ConfigJogo.TAM_TILE)
@@ -70,15 +91,17 @@ class Bomba:
                     break
                 else:
                     tela.blit(self.img_explosao, (self._x, self._y+i*ConfigJogo.TAM_TILE))
-                    colisaoExplosao = pygame.Rect(self._x, self._y+i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
                     self.explosoes.append(colisaoExplosao)
-                    for inimigo in self.inimigos:
-                        if colisaoExplosao.colliderect(inimigo.colisao):
-                            break
-                
 
-            for i in range(self.alcance+1): #Y NEG
+            for i in range(self.alcanceYN): #Y NEG
                 tileType = mapa.destrutivel(self._x, self._y-i*ConfigJogo.TAM_TILE)
+                colisaoExplosao = pygame.Rect(self._x, self._y-i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                if not self.primeiraColisaoYN:
+                    for inimigo in self.inimigos:
+                        if colisaoExplosao.colliderect(inimigo.colisao) or colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
+                            self.alcanceYN = i+1
+                            self.primeiraColisaoYN = True
+                            break
                 if tileType == TileType.DESTRUTIVEL_C.value or tileType == TileType.FIXA.value:
                     col = int((self._x)//ConfigJogo.TAM_TILE)
                     lin = int(((self._y-(i)*ConfigJogo.TAM_TILE) - ConfigJogo.ALTURA_MENU)//ConfigJogo.TAM_TILE)
@@ -87,11 +110,7 @@ class Bomba:
                     break
                 else:
                     tela.blit(self.img_explosao, (self._x, self._y-i*ConfigJogo.TAM_TILE))
-                    colisaoExplosao = pygame.Rect(self._x, self._y-i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
                     self.explosoes.append(colisaoExplosao)
-                    for inimigo in self.inimigos:
-                        if colisaoExplosao.colliderect(inimigo.colisao):
-                            break
 
     def verificar(self):
         #Verifica se existe alguma bomba na posicao, se existir retorna False
@@ -137,12 +156,12 @@ class Bomba:
                 if self in bombasVetor:
                     bombasVetor.remove(self)
             
-    def desenha(self, tela: pygame.Surface, mapa: Mapa, bombasVetores):
+    def desenha(self, tela: pygame.Surface, mapa: Mapa, bombasVetores, p1, p2):
         self.atualizar(mapa, bombasVetores)
         if not self.explodida and self.verificada:
             tela.blit(self.img_bomba, (self._x, self._y))
         if self.explodida:
-            self.explodir(tela, mapa)
+            self.explodir(tela, mapa, p1, p2)
 
     def getX(self):
         return self._x

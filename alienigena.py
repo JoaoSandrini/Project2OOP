@@ -65,7 +65,7 @@ class Alienigena:
                 for bomba in bombaVetor:
                     if bomba.colisao.colliderect(self.colisao):
                         bombaColisao = True
-
+            
             if self._idx_movimento == Direcao.ESQUERDA.value:
                 new_x -= ConfigJogo.VELOCIDADE_ALIEN
             elif self._idx_movimento == Direcao.DIREITA.value:
@@ -86,3 +86,15 @@ class Alienigena:
     def atira(self):
             projetil = Projetil(self._x, self._y, self._mapa)
             self.projeteis.append(projetil)
+
+    def getX(self):
+        return self._x
+    
+    def setX(self, x):
+        self._x = x
+
+    def getY(self):
+        return self._y
+    
+    def setY(self, y):
+        self._y = y
