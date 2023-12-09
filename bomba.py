@@ -1,4 +1,5 @@
 import pygame
+from alienigena import Alienigena
 from config_jogo import ConfigJogo
 from utils import ler_imagem
 from cronometro import Cronometro
@@ -56,6 +57,12 @@ class Bomba:
                         self.alcanceXP = i+1
                         self.primeiraColisaoXP = True
                     for inimigo in self.inimigos:
+                        if type(inimigo) == Alienigena:
+                            for projetil in inimigo.projeteis:
+                               if colisaoExplosao.colliderect(projetil.colisao):
+                                    projetil.colidido = True
+                                    inimigo.projeteis.remove(projetil)
+                    for inimigo in self.inimigos:
                         if colisaoExplosao.colliderect(inimigo.colisao):
                             self.alcanceXP = i+1
                             self.primeiraColisaoXP = True
@@ -82,6 +89,12 @@ class Bomba:
                     if colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
                         self.alcanceXN = i+1
                         self.primeiraColisaoXN = True
+                    for inimigo in self.inimigos:
+                        if type(inimigo) == Alienigena:
+                            for projetil in inimigo.projeteis:
+                               if colisaoExplosao.colliderect(projetil.colisao):
+                                    projetil.colidido = True
+                                    inimigo.projeteis.remove(projetil)
                     for inimigo in self.inimigos:
                         if colisaoExplosao.colliderect(inimigo.colisao):
                             self.alcanceXN = i+1
@@ -110,6 +123,12 @@ class Bomba:
                         self.alcanceYP = i+1
                         self.primeiraColisaoYP = True
                     for inimigo in self.inimigos:
+                        if type(inimigo) == Alienigena:
+                            for projetil in inimigo.projeteis:
+                               if colisaoExplosao.colliderect(projetil.colisao):
+                                    projetil.colidido = True
+                                    inimigo.projeteis.remove(projetil)
+                    for inimigo in self.inimigos:
                         if colisaoExplosao.colliderect(inimigo.colisao):
                             self.alcanceYP = i+1
                             self.primeiraColisaoYP = True
@@ -137,6 +156,12 @@ class Bomba:
                         self.alcanceYN = i+1
                         self.primeiraColisaoYN = True
                     for inimigo in self.inimigos:
+                        if type(inimigo) == Alienigena:
+                            for projetil in inimigo.projeteis:
+                               if colisaoExplosao.colliderect(projetil.colisao):
+                                    projetil.colidido = True
+                                    inimigo.projeteis.remove(projetil)
+                    for inimigo in self.inimigos:
                         if colisaoExplosao.colliderect(inimigo.colisao):
                             self.alcanceYN = i+1
                             self.primeiraColisaoYN = True
@@ -150,7 +175,7 @@ class Bomba:
         self.verificada = True
         return True
             
-    def atualizar(self, mapa: Mapa, bombasVetores, projeteis):
+    def atualizar(self, mapa: Mapa, bombasVetores):
         self.inimigos = self.quartel.getInimigos()
         tempo_atual = time.time()
         if not self.explodida:
@@ -165,9 +190,13 @@ class Bomba:
                         if rect.colliderect(self.colisao):
                             self.diferencaTempo = self.duracao+0.1
 
-        for projetil in projeteis:
-            if projetil.colisao.colliderect(self.colisao):
-                self.diferencaTempo = self.duracao+0.1
+        for inimigo in self.inimigos:
+            if type(inimigo) == Alienigena:
+                for projetil in inimigo.projeteis:
+                    if projetil.colisao.colliderect(self.colisao):
+                        self.diferencaTempo = self.duracao+0.1
+                        projetil.colidido = True
+                        inimigo.projeteis.remove(projetil)
 
         if not self.explodida and self.diferencaTempo > self.duracao:
             self.explodida = True
@@ -190,8 +219,8 @@ class Bomba:
                 if self in bombasVetor:
                     bombasVetor.remove(self)
             
-    def desenha(self, tela: pygame.Surface, mapa: Mapa, bombasVetores, projeteis, p1, p2):
-        self.atualizar(mapa, bombasVetores, projeteis)
+    def desenha(self, tela: pygame.Surface, mapa: Mapa, bombasVetores, p1, p2):
+        self.atualizar(mapa, bombasVetores)
         if not self.explodida and self.verificada:
             tela.blit(self.img_bomba, (self._x, self._y))
         if self.explodida:

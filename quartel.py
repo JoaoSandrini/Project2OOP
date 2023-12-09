@@ -34,7 +34,6 @@ class Quartel:
                                 if self._vida == 0:
                                     pass
 
-
         if  time.time() - self._time_last_spawn > ConfigJogo.CD_SPAWN and len(self.inimigos) < ConfigJogo.MAX_INIMIGOS:
             rand = random.randint(0, 1)
             if rand == 0:
