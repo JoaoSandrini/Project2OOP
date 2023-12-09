@@ -7,6 +7,7 @@ from personagem import Personagem
 import pygame
 from cronometro import Cronometro
 from config_jogo import ConfigJogo
+from projetil import Projetil
 from utils import ler_imagem
 from quartel import Quartel
 import random
@@ -15,7 +16,7 @@ from pygame import gfxdraw
 
 
 class CenaPrincipal():
-    def __init__(self, tela: pygame.display, num_jogadores: int, bombas: list[list[Bomba], list[Bomba]]):
+    def __init__(self, tela: pygame.display, num_jogadores: int, bombas: list[list[Bomba], list[Bomba]], projeteis: list[Projetil]):
         self.mapa = Mapa()
         self.tela = tela
         self.encerrada = False
@@ -23,6 +24,7 @@ class CenaPrincipal():
         self.quartel = Quartel(self.mapa, self.tela)
         self.cronometro = Cronometro()
         self.bombas = bombas
+        self.projeteis = projeteis
         
         self._time_last_spawn = 0
         self.img_relogio = ler_imagem('telas/relogio.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
@@ -53,10 +55,10 @@ class CenaPrincipal():
                     """
 
             for bomba in self.p1.bombas:
-                bomba.desenha(self.tela, self.mapa, self.bombas, self.p1.colisao, self.p1.colisao)
+                bomba.desenha(self.tela, self.mapa, self.bombas, self.projeteis, self.p1.colisao, self.p1.colisao)
             if self.p2:
                 for bomba in self.p2.bombas:
-                    bomba.desenha(self.tela, self.mapa, self.bombas, self.p1.colisao, self.p2.colisao)
+                    bomba.desenha(self.tela, self.mapa, self.bombas, self.projeteis, self.p1.colisao, self.p2.colisao)
             
             self.p1.desenha()
             if self.p2:

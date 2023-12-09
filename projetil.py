@@ -15,6 +15,7 @@ class Projetil:
         self._mapa = mapa
         self._x = x
         self._y = y
+        self.colisao = None
         self._time_last_move = 0 
         self.colidido = False
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
@@ -45,12 +46,10 @@ class Projetil:
                 self.colidido = True
 
     def desenha(self, tela: pygame.Surface):
-        if self._idx_movimento == Direcao.ESQUERDA.value:
-            pygame.draw.rect(tela, 'red', (self._x, (self._y + ConfigJogo.TAM_TILE//2) - ConfigJogo.ALTURA_PROJETIL//2, ConfigJogo.LARGURA_PROJETIL, ConfigJogo.ALTURA_PROJETIL))
-        elif self._idx_movimento == Direcao.DIREITA.value:
-            pygame.draw.rect(tela, 'red', (self._x, (self._y + ConfigJogo.TAM_TILE//2) - ConfigJogo.ALTURA_PROJETIL//2, ConfigJogo.LARGURA_PROJETIL, ConfigJogo.ALTURA_PROJETIL))
-        elif self._idx_movimento == Direcao.BAIXO.value:
-            pygame.draw.rect(tela, 'red', ((self._x + ConfigJogo.TAM_TILE//2) - ConfigJogo.ALTURA_PROJETIL//2, self._y, ConfigJogo.ALTURA_PROJETIL, ConfigJogo.LARGURA_PROJETIL))
-        elif self._idx_movimento == Direcao.CIMA.value:
-            pygame.draw.rect(tela, 'red', ((self._x + ConfigJogo.TAM_TILE//2) - ConfigJogo.ALTURA_PROJETIL//2, self._y, ConfigJogo.ALTURA_PROJETIL, ConfigJogo.LARGURA_PROJETIL))
-        
+        rect = None
+        if self._idx_movimento == Direcao.ESQUERDA.value or self._idx_movimento == Direcao.DIREITA.value:
+            rect = (self._x, (self._y + ConfigJogo.TAM_TILE//2) - ConfigJogo.ALTURA_PROJETIL//2, ConfigJogo.LARGURA_PROJETIL, ConfigJogo.ALTURA_PROJETIL)
+        elif self._idx_movimento == Direcao.BAIXO.value or self._idx_movimento == Direcao.CIMA.value:
+            rect = ((self._x + ConfigJogo.TAM_TILE//2) - ConfigJogo.ALTURA_PROJETIL//2, self._y, ConfigJogo.ALTURA_PROJETIL, ConfigJogo.LARGURA_PROJETIL)
+        pygame.draw.rect(tela, 'red', rect)
+        self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.LARGURA_PROJETIL, ConfigJogo.ALTURA_PROJETIL)

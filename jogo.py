@@ -19,9 +19,10 @@ class Jogo:
         cena.rodar()
         
         while True:
-            cena_principal = CenaPrincipal(self.tela, cena.num_jogadores, self.bombas)
+            cena_principal = CenaPrincipal(self.tela, cena.num_jogadores, self.bombas, self.projeteis)
             cena_principal.rodar()
             self.projeteis = cena_principal.alien.projeteis
+            print(self.projeteis)
 """
             for bomba in cena_principal.p1.bombas:
                 if len(self.bombas[0]) < 4:  # Limit to 4 bombs per player

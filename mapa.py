@@ -18,7 +18,7 @@ class Mapa:
         self.fixa = ler_imagem('map/parede-fixa.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
 
         self.map_matrix = []
-        with open('map/MapMatrix.csv', newline='') as csvfile:
+        with open('map/mapa_testes.csv', newline='') as csvfile:
             spamreader = csv.reader(csvfile)
             for linha in spamreader:
                 linha = [int(valor) for valor in linha]
