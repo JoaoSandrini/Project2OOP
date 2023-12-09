@@ -16,12 +16,12 @@ class Bomba:
     def atualizar(self):
         tempo_atual = time.time()
 
-        if tempo_atual - self.time_lancamento > self.duracao:
+        if tempo_atual - self.time_lancamento > self.duracao:                                                               
             self.explodida = True
 
     def desenha(self, tela: pygame.Surface):
         self.atualizar()
         if not self.explodida:
-            tela.blit(self.img_bomba, (self._x, self._y))
+            tela.blit(self.img_bomba, (self._x, self._y))       
 
 
