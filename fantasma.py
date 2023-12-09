@@ -22,8 +22,9 @@ class Fantasma:
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
         self.time_inalvejavel = 6
         self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
-        
+        self._tipo_aura = random.randint(0, 1)
         self.tela = tela
+        
 
         self._time_last_move = 0
         
@@ -93,3 +94,7 @@ class Fantasma:
     
     def setY(self, y):
         self._y = y
+
+    def get_tipo_aura(self):
+        return self._tipo_aura
+            

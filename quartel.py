@@ -13,6 +13,7 @@ class Quartel:
         self._y = ConfigJogo.QUARTEL_Y 
         self._vida = ConfigJogo.VIDA_QUARTEL
         self.inimigos = []
+        self.fantasmas = []
         self._time_last_spawn = 0
         self.mapa = mapa
         self.tela = tela
@@ -34,10 +35,11 @@ class Quartel:
                                     pass
 
 
-        if  time.time() - self._time_last_spawn > 2:
+        if  time.time() - self._time_last_spawn > ConfigJogo.CD_SPAWN and len(self.inimigos) < ConfigJogo.MAX_INIMIGOS:
             rand = random.randint(0, 1)
             if rand == 0:
                 self.inimigos.append(Fantasma(self.mapa, self.tela))
+                self.fantasmas.append(self.inimigos[-1])
             elif rand == 1:
                 self.inimigos.append(Alienigena(self.mapa, self.tela))
             self._time_last_spawn = time.time()

@@ -6,10 +6,10 @@ import time
 from mapa import Mapa, TileType
 
 class Bomba:
-    def __init__(self, pers, x: int, y: int, quartel) -> None:
+    def __init__(self, pers, x: int, y: int, quartel, duracao_bomba: float) -> None:
         self.img_bomba = ler_imagem('items/bomba.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
         self.img_explosao = ler_imagem('items/fogo.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
-        self.duracao = ConfigJogo.DURACAO_BOMBA
+        self.duracao = duracao_bomba
         self.alcance = ConfigJogo.ALCANCE_BOMBA
         self._x = x-x%ConfigJogo.TAM_TILE
         self.p = pers
