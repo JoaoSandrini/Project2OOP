@@ -1,6 +1,7 @@
 import sys
 import time
 from typing import Tuple
+from alienigena import Alienigena
 from bomba import Bomba
 from mapa import Mapa, TileType
 from personagem import Personagem
@@ -15,7 +16,6 @@ from pygame import gfxdraw
 from fantasma import Fantasma
 import math
 import numpy as np
-
 
 class CenaPrincipal():
     def __init__(self, tela: pygame.display, num_jogadores: int, bombas: list[list[Bomba], list[Bomba]], projeteis: list[Projetil]):
@@ -68,11 +68,9 @@ class CenaPrincipal():
         if aura_fantasma_perto == 0:
             personagem.cd = ConfigJogo.CD_AURA_RAPIDA
             personagem.duracao_bomba = ConfigJogo.DURACAO_BOMBA_RAPIDA
-
         elif aura_fantasma_perto == 1:
             personagem.cd = ConfigJogo.CD_AURA_LENTA
             personagem.duracao_bomba = ConfigJogo.DURACAO_BOMBA_LENTA
-
         personagem.cd_atualizado = True
         personagem.tipo_fantasma_perto = aura_fantasma_perto
                 
@@ -81,10 +79,10 @@ class CenaPrincipal():
             self.mapa.desenha(self.tela)
 
             for bomba in self.p1.bombas:
-                bomba.desenha(self.tela, self.mapa, self.bombas, self.projeteis, self.p1.colisao, self.p1.colisao)
+                bomba.desenha(self.tela, self.mapa, self.bombas, self.p1.colisao, self.p1.colisao)
             if self.p2:
                 for bomba in self.p2.bombas:
-                    bomba.desenha(self.tela, self.mapa, self.bombas, self.projeteis, self.p1.colisao, self.p2.colisao)
+                    bomba.desenha(self.tela, self.mapa, self.bombas, self.p1.colisao, self.p2.colisao)
             
             self.p1.desenha()
             if self.p2:
@@ -99,7 +97,7 @@ class CenaPrincipal():
             pygame.display.flip()
 
     def tratamento_eventos(self):
-        quartel_colisao = False
+        self.inimigos = self.quartel.getInimigos()
         tempo = time.time()
         # evento de saida
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
@@ -173,7 +171,36 @@ class CenaPrincipal():
                         self.p1.colisao_quartel = True
                     else:
                         self.p1.colisao_quartel = False
-
+            
+            #COLISAO COM PERSONAGEM E PROJETIL OU PERSONAGEM E INIMIGO
+            for inimigo in self.inimigos:
+                if self.p1.colisao.colliderect(inimigo.colisao):
+                    if time.time() - self.p1.time_inalvejavel > 5:
+                        self.p1.vida -= 1
+                        if self.p1.vida == 0:
+                            self.encerrada = True
+                            print("GAME OVER")
+                            sys.exit(0)
+                        else:
+                            new_p1x = ConfigJogo.TAM_TILE
+                            new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
+                            self.p1.time_inalvejavel=time.time()
+                if type(inimigo) == Alienigena:
+                    for projetil in inimigo.projeteis:
+                        if self.p1.colisao.colliderect(projetil.colisao):
+                            projetil.colidido = True
+                            inimigo.projeteis.remove(projetil)
+                            if time.time() - self.p1.time_inalvejavel > 5:
+                                self.p1.vida -= 1
+                                if self.p1.vida == 0:
+                                    self.encerrada = True
+                                    print("GAME OVER")
+                                    sys.exit(0)
+                                else:
+                                    new_p1x = ConfigJogo.TAM_TILE
+                                    new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
+                                    self.p1.time_inalvejavel=time.time()
+                        
             if not self.p1._mapa.is_any_wall(new_p1x, new_p1y) and not self.p1.colisao_quartel:
 
                 bombaColisao = False
@@ -235,6 +262,35 @@ class CenaPrincipal():
                 if pygame.key.get_pressed()[pygame.K_UP]:
                     new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
                 
+                #COLISAO COM PERSONAGEM E PROJETIL
+                for inimigo in self.inimigos:
+                    if self.p2.colisao.colliderect(inimigo.colisao):
+                        if time.time() - self.p2.time_inalvejavel > 5:
+                            self.p2.vida -= 1
+                            if self.p2.vida == 0:
+                                self.encerrada = True
+                                print("GAME OVER")
+                                sys.exit(0)
+                            else:
+                                new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
+                                new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
+                                self.p2.time_inalvejavel=time.time()
+                    if type(inimigo) == Alienigena:
+                        for projetil in inimigo.projeteis:
+                            if self.p2.colisao.colliderect(projetil.colisao):
+                                projetil.colidido = True
+                                inimigo.projeteis.remove(projetil)
+                                if time.time() - self.p2.time_inalvejavel > 5:
+                                    self.p2.vida -= 1
+                                    if self.p2.vida == 0:
+                                        self.encerrada = True
+                                        print("GAME OVER")
+                                        sys.exit(0)
+                                    else:
+                                        new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
+                                        new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
+                                        self.p2.time_inalvejavel=time.time()
+
                 if not self.p2._mapa.is_any_wall(new_p2x, new_p2y):
                     bombaColisao = False
                     for bombaVetor in self.bombas:

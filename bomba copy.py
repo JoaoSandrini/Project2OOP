@@ -43,7 +43,6 @@ class Bomba:
                     alcance = i+1
                     primeiraColisao = True
                 for inimigo in self.inimigos:
-                    print(colisaoExplosao.colliderect(p2))
                     if colisaoExplosao.colliderect(inimigo.colisao):
                         alcance = i+1
                         primeiraColisao = True

@@ -15,7 +15,7 @@ class Projetil:
         self._mapa = mapa
         self._x = x
         self._y = y
-        self.colisao = None
+        self.colisao = pygame.Rect(self._x, self._y, ConfigJogo.LARGURA_PROJETIL, ConfigJogo.ALTURA_PROJETIL)
         self._time_last_move = 0 
         self.colidido = False
         self._idx_movimento = random.randint(Direcao.ESQUERDA.value, Direcao.CIMA.value)
