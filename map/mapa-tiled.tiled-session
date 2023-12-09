@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "MapaBomberman.tmx",
     "expandedProjectPaths": [
         ".",
         "map"
@@ -19,7 +19,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 157.91157894736844,
-                "y": 117.49052631578947
+                "y": 116.95157894736842
             }
         },
         "grama.tsx": {

@@ -22,7 +22,6 @@ class Quartel:
 
     def tratamento_eventos(self, bombaVetores):
         timeAtt = time.time()
-        self.colisao = self.img_quartel.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
         for bombaVetor in bombaVetores:
             for bomba in bombaVetor:  
                 if bomba.explosao: # colisao com a explosao
@@ -34,16 +33,20 @@ class Quartel:
                                 print(self._vida)
                                 if self._vida == 0:
                                     pass
-
+        
         if ConfigJogo.INIMIGOS:
             if  time.time() - self._time_last_spawn > ConfigJogo.CD_SPAWN and len(self.inimigos) < ConfigJogo.MAX_INIMIGOS:
-                rand = random.randint(0, 1)
-                if rand == 0:
-                    self.inimigos.append(Fantasma(self.mapa, self.tela))
-                    self.fantasmas.append(self.inimigos[-1])
-                elif rand == 1:
+                if len(self.fantasmas) < ConfigJogo.MAX_INIMIGOS_TIPO:
+                    rand = random.randint(0, 1)
+                    if rand == 0:
+                        self.inimigos.append(Fantasma(self.mapa, self.tela))
+                        self.fantasmas.append(self.inimigos[-1])
+                    elif rand == 1:
+                        self.inimigos.append(Alienigena(self.mapa, self.tela))
+                    self._time_last_spawn = time.time()
+                else: 
                     self.inimigos.append(Alienigena(self.mapa, self.tela))
-                self._time_last_spawn = time.time()
+                    self._time_last_spawn = time.time()
 
     def desenha(self, bombaVetores):
         self.tela.blit(self.img_quartel, (self._x, self._y))
@@ -83,4 +86,8 @@ class Quartel:
         al1.setX(150)
         al1.setY(400)
         self.inimigos.append(al1)
-        
+    
+    def quartel_colisao(self, x, y):
+        if self.colisao.collidepoint(x, y):
+            return True
+        return False
