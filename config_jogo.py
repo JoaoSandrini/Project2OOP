@@ -1,6 +1,6 @@
 class ConfigJogo:
 
-    INIMIGOS = True
+    INIMIGOS = False
     TAM_TILE = 32
     ALTURA_MENU = 2*TAM_TILE
     LARGURA_TELA = TAM_TILE*20

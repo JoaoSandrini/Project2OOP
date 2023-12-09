@@ -88,9 +88,8 @@ class CenaPrincipal():
             if self.p2:
                 self.p2.desenha()
 
-            if ConfigJogo.INIMIGOS:
-                self.quartel.desenha(self.bombas)
-                self.quartel.tratamento_eventos(self.bombas)
+            self.quartel.desenha(self.bombas)
+            self.quartel.tratamento_eventos(self.bombas)
             self.tratamento_eventos()
             self.desenha_menu()
        

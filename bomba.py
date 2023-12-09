@@ -53,9 +53,14 @@ class Bomba:
                 for i in range(self.alcanceXP): #X POS
                     tileType = mapa.destrutivel(self._x+i*ConfigJogo.TAM_TILE, self._y)
                     colisaoExplosao = pygame.Rect(self._x+i*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                    if colisaoExplosao.colliderect(self.quartel.colisao):
+                        self.alcanceXP = i+1
+                        self.primeiraColisaoXP = True
+                        break
                     if colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
                         self.alcanceXP = i+1
                         self.primeiraColisaoXP = True
+                        break
                     for inimigo in self.inimigos:
                         if type(inimigo) == Alienigena:
                             for projetil in inimigo.projeteis:
@@ -86,9 +91,14 @@ class Bomba:
                 for i in range(self.alcanceXN): #X NEG
                     tileType = mapa.destrutivel(self._x-i*ConfigJogo.TAM_TILE, self._y)
                     colisaoExplosao = pygame.Rect(self._x-i*ConfigJogo.TAM_TILE, self._y, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                    if colisaoExplosao.colliderect(self.quartel.colisao):
+                        self.alcanceXN = i+1
+                        self.primeiraColisaoYP = True
+                        break
                     if colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
                         self.alcanceXN = i+1
                         self.primeiraColisaoXN = True
+                        break
                     for inimigo in self.inimigos:
                         if type(inimigo) == Alienigena:
                             for projetil in inimigo.projeteis:
@@ -119,9 +129,14 @@ class Bomba:
                 for i in range(self.alcanceYP): #Y POS
                     tileType = mapa.destrutivel(self._x, self._y+i*ConfigJogo.TAM_TILE)
                     colisaoExplosao = pygame.Rect(self._x, self._y+i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                    if colisaoExplosao.colliderect(self.quartel.colisao):
+                        self.alcanceYP = i+1
+                        self.primeiraColisaoYP = True
+                        break
                     if colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
                         self.alcanceYP = i+1
                         self.primeiraColisaoYP = True
+                        break
                     for inimigo in self.inimigos:
                         if type(inimigo) == Alienigena:
                             for projetil in inimigo.projeteis:
@@ -152,9 +167,14 @@ class Bomba:
                 for i in range(self.alcanceYN): #Y NEG
                     tileType = mapa.destrutivel(self._x, self._y-i*ConfigJogo.TAM_TILE)
                     colisaoExplosao = pygame.Rect(self._x, self._y-i*ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE)
+                    if colisaoExplosao.colliderect(self.quartel.colisao):
+                        self.alcanceYN = i+1
+                        self.primeiraColisaoYN = True
+                        break
                     if colisaoExplosao.colliderect(p1) or colisaoExplosao.colliderect(p2):
                         self.alcanceYN = i+1
                         self.primeiraColisaoYN = True
+                        break
                     for inimigo in self.inimigos:
                         if type(inimigo) == Alienigena:
                             for projetil in inimigo.projeteis:
