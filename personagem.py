@@ -29,6 +29,7 @@ class Personagem:
         self.vida = ConfigJogo.VIDA_PERSONAGEM
         self.duracao_bomba = ConfigJogo.DURACAO_BOMBA
         self.colisao_quartel = False
+        self.morto = False
 
         self._time_last_move = 0
         self.time_inalvejavel = time.time()

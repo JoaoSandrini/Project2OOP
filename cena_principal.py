@@ -96,6 +96,11 @@ class CenaPrincipal():
             pygame.display.flip()
 
     def tratamento_eventos(self):
+        if self.p1.morto and self.p2.morto:
+            self.encerrada = True
+            time.sleep(2)
+            return
+        
         self.inimigos = self.quartel.getInimigos()
         tempo = time.time()
         # evento de saida
@@ -109,219 +114,219 @@ class CenaPrincipal():
                 if event.key == pygame.K_0 and self.p2:
                     self.p2.soltar_bomba(self.bombas, 2)
 
-        self.verifica_aura(self.p1)
-
-        if self.p1 and tempo - self.p1._time_last_move > self.p1.cd:
-            if tempo - self.p1.time_inalvejavel < 5:
-                if ((tempo - self.p1.time_inalvejavel) % 0.5) < 0.25:
-                    self.p1.personagem.set_alpha(100)
-                else:
-                    self.p1.personagem.set_alpha(190)
+        if self.p1:
+            if self.p1.morto:
+                self.p1.setX(-100)
+                self.p1.setY(-100)
             else:
-                self.p1.personagem.set_alpha(255)
-
-            new_p1x = self.p1.getX()
-            new_p1y = self.p1.getY()
-        
-            if pygame.key.get_pressed()[pygame.K_a]:
-                if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                    new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                    new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                else:
-                    new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                    if self.quartel.quartel_colisao(new_p1x, new_p1y):
-                        self.p1.colisao_quartel = True
-                    else:
-                        self.p1.colisao_quartel = False
-                                
-            if pygame.key.get_pressed()[pygame.K_d]:
-                if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                    new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                    new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                else:
-                    new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                    if self.quartel.quartel_colisao(new_p1x + ConfigJogo.TAM_TILE, new_p1y):
-                        self.p1.colisao_quartel = True
-                    else:
-                        self.p1.colisao_quartel = False
-                        
-            if pygame.key.get_pressed()[pygame.K_s]:
-                if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
-                   new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
-                    new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                else:
-                    new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                    if self.quartel.quartel_colisao(new_p1x, new_p1y + ConfigJogo.TAM_TILE):
-                        self.p1.colisao_quartel = True
-                    else:
-                        self.p1.colisao_quartel = False
-
-            if pygame.key.get_pressed()[pygame.K_w]:
-                if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
-                   new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
-                    new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                else:
-                    new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                    if self.quartel.quartel_colisao(new_p1x, new_p1y):
-                        self.p1.colisao_quartel = True
-                    else:
-                        self.p1.colisao_quartel = False
-            
-            #COLISAO COM PERSONAGEM E PROJETIL OU PERSONAGEM E INIMIGO
-            for inimigo in self.inimigos:
-                if self.p1.colisao.colliderect(inimigo.colisao):
-                    if time.time() - self.p1.time_inalvejavel > 5:
-                        self.p1.vida -= 1
-                        if self.p1.vida == 0:
-                            self.encerrada = True
-                            print("GAME OVER")
-                            sys.exit(0)
+                self.verifica_aura(self.p1)
+                if tempo - self.p1._time_last_move > self.p1.cd:
+                    if tempo - self.p1.time_inalvejavel < 5:
+                        if ((tempo - self.p1.time_inalvejavel) % 0.5) < 0.25:
+                            self.p1.personagem.set_alpha(100)
                         else:
-                            new_p1x = ConfigJogo.TAM_TILE
-                            new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
-                            self.p1.time_inalvejavel=time.time()
-                if type(inimigo) == Alienigena:
-                    for projetil in inimigo.projeteis:
-                        if self.p1.colisao.colliderect(projetil.colisao):
-                            projetil.colidido = True
-                            inimigo.projeteis.remove(projetil)
+                            self.p1.personagem.set_alpha(190)
+                    else:
+                        self.p1.personagem.set_alpha(255)
+
+                    new_p1x = self.p1.getX()
+                    new_p1y = self.p1.getY()
+                
+                    if pygame.key.get_pressed()[pygame.K_a]:
+                        if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
+                            new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                        elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
+                            new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                        else:
+                            new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                            if self.quartel.quartel_colisao(new_p1x, new_p1y):
+                                self.p1.colisao_quartel = True
+                            else:
+                                self.p1.colisao_quartel = False
+                                        
+                    if pygame.key.get_pressed()[pygame.K_d]:
+                        if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
+                            new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                        elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
+                            new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                        else:
+                            new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                            if self.quartel.quartel_colisao(new_p1x + ConfigJogo.TAM_TILE, new_p1y):
+                                self.p1.colisao_quartel = True
+                            else:
+                                self.p1.colisao_quartel = False
+                                
+                    if pygame.key.get_pressed()[pygame.K_s]:
+                        if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
+                            new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                        elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
+                            new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                        else:
+                            new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                            if self.quartel.quartel_colisao(new_p1x, new_p1y + ConfigJogo.TAM_TILE):
+                                self.p1.colisao_quartel = True
+                            else:
+                                self.p1.colisao_quartel = False
+
+                    if pygame.key.get_pressed()[pygame.K_w]:
+                        if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
+                            new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                        elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1._mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
+                            new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                        else:
+                            new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                            if self.quartel.quartel_colisao(new_p1x, new_p1y):
+                                self.p1.colisao_quartel = True
+                            else:
+                                self.p1.colisao_quartel = False
+                    
+                    #COLISAO COM PERSONAGEM E PROJETIL OU PERSONAGEM E INIMIGO
+                    for inimigo in self.inimigos:
+                        if self.p1.colisao.colliderect(inimigo.colisao):
                             if time.time() - self.p1.time_inalvejavel > 5:
                                 self.p1.vida -= 1
                                 if self.p1.vida == 0:
-                                    self.encerrada = True
-                                    print("GAME OVER")
-                                    sys.exit(0)
+                                    self.p1.morto = True
+                                    return
                                 else:
                                     new_p1x = ConfigJogo.TAM_TILE
                                     new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
                                     self.p1.time_inalvejavel=time.time()
-                        
-            if not self.p1._mapa.is_any_wall(new_p1x, new_p1y) and not self.p1.colisao_quartel:
-
-                bombaColisao = False
-
-                for bombaVetor in self.bombas:
-                    for bomba in bombaVetor:  
-                        if not bomba.explosao and not self.p1.colisao.colliderect(bomba.colisao): #Para não colidir após colocar a bomba
-                            bomba_tile = (bomba.getX() // ConfigJogo.TAM_TILE, bomba.getY() // ConfigJogo.TAM_TILE)
-                            new_p1_tile_left = (new_p1x // ConfigJogo.TAM_TILE, new_p1y // ConfigJogo.TAM_TILE)
-                            new_p1_tile_right = ((new_p1x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE, new_p1y // ConfigJogo.TAM_TILE)
-                            new_p1_tile_down = (new_p1x // ConfigJogo.TAM_TILE, (new_p1y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE)
-
-                            if bomba_tile in [new_p1_tile_left, new_p1_tile_right, new_p1_tile_down]:
-                                bombaColisao = True
-                        if bomba.explosao: # colisao com a explosao
-                            for rect in bomba.explosoes:
-                                if rect.colliderect(self.p1.colisao):
+                        if type(inimigo) == Alienigena:
+                            for projetil in inimigo.projeteis:
+                                if self.p1.colisao.colliderect(projetil.colisao):
+                                    projetil.colidido = True
+                                    inimigo.projeteis.remove(projetil)
                                     if time.time() - self.p1.time_inalvejavel > 5:
-                                        print(self.p1.vida)
                                         self.p1.vida -= 1
                                         if self.p1.vida == 0:
-                                            self.encerrada = True
-                                            print("GAME OVER")
-                                            sys.exit(0)
+                                            self.p1.morto = True
+                                            return
                                         else:
                                             new_p1x = ConfigJogo.TAM_TILE
                                             new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
                                             self.p1.time_inalvejavel=time.time()
+                                
+                    if not self.p1._mapa.is_any_wall(new_p1x, new_p1y) and not self.p1.colisao_quartel:
 
-                if not bombaColisao:
-                    self.p1.setX(new_p1x)
-                    self.p1.setY(new_p1y)
-                    self.p1.colisao = self.p1.personagem.get_rect(topleft=(new_p1x, new_p1y))
+                        bombaColisao = False
 
-                    self.p1._time_last_move = time.time()
+                        for bombaVetor in self.bombas:
+                            for bomba in bombaVetor:  
+                                if not bomba.explosao and not self.p1.colisao.colliderect(bomba.colisao): #Para não colidir após colocar a bomba
+                                    bomba_tile = (bomba.getX() // ConfigJogo.TAM_TILE, bomba.getY() // ConfigJogo.TAM_TILE)
+                                    new_p1_tile_left = (new_p1x // ConfigJogo.TAM_TILE, new_p1y // ConfigJogo.TAM_TILE)
+                                    new_p1_tile_right = ((new_p1x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE, new_p1y // ConfigJogo.TAM_TILE)
+                                    new_p1_tile_down = (new_p1x // ConfigJogo.TAM_TILE, (new_p1y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE)
 
+                                    if bomba_tile in [new_p1_tile_left, new_p1_tile_right, new_p1_tile_down]:
+                                        bombaColisao = True
+                                if bomba.explosao: # colisao com a explosao
+                                    for rect in bomba.explosoes:
+                                        if rect.colliderect(self.p1.colisao):
+                                            if time.time() - self.p1.time_inalvejavel > 5:
+                                                print(self.p1.vida)
+                                                self.p1.vida -= 1
+                                                if self.p1.vida == 0:
+                                                    self.p1.morto = True
+                                                    return
+                                                else:
+                                                    new_p1x = ConfigJogo.TAM_TILE
+                                                    new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
+                                                    self.p1.time_inalvejavel=time.time()
 
+                        if not bombaColisao:
+                            self.p1.setX(new_p1x)
+                            self.p1.setY(new_p1y)
+                            self.p1.colisao = self.p1.personagem.get_rect(topleft=(new_p1x, new_p1y))
+
+                            self.p1._time_last_move = time.time()
 
         if self.p2:
-            self.verifica_aura(self.p2)
-            if tempo - self.p2._time_last_move > self.p2.cd: 
-                if tempo - self.p2.time_inalvejavel < 5:
-                    if ((tempo - self.p2.time_inalvejavel) % 0.5) < 0.25:
-                        self.p2.personagem.set_alpha(100)
+            if self.p2.morto:
+                self.p2.setX(-100)
+                self.p2.setY(-100)
+            else:
+                self.verifica_aura(self.p2)
+                if tempo - self.p2._time_last_move > self.p2.cd: 
+                    if tempo - self.p2.time_inalvejavel < 5:
+                        if ((tempo - self.p2.time_inalvejavel) % 0.5) < 0.25:
+                            self.p2.personagem.set_alpha(100)
+                        else:
+                            self.p2.personagem.set_alpha(190)
                     else:
-                        self.p2.personagem.set_alpha(190)
-                else:
-                    self.p2.personagem.set_alpha(255)
+                        self.p2.personagem.set_alpha(255)
 
-                new_p2x = self.p2.getX()
-                new_p2y = self.p2.getY()
+                    new_p2x = self.p2.getX()
+                    new_p2y = self.p2.getY()
 
-                if pygame.key.get_pressed()[pygame.K_LEFT]:
-                    new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                if pygame.key.get_pressed()[pygame.K_RIGHT]:
-                    new_p2x = self.p2.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                if pygame.key.get_pressed()[pygame.K_DOWN]:
-                    new_p2y = self.p2.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
-                if pygame.key.get_pressed()[pygame.K_UP]:
-                    new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                
-                #COLISAO COM PERSONAGEM E PROJETIL
-                for inimigo in self.inimigos:
-                    if self.p2.colisao.colliderect(inimigo.colisao):
-                        if time.time() - self.p2.time_inalvejavel > 5:
-                            self.p2.vida -= 1
-                            if self.p2.vida == 0:
-                                self.encerrada = True
-                                print("GAME OVER")
-                                sys.exit(0)
-                            else:
-                                new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
-                                new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
-                                self.p2.time_inalvejavel=time.time()
-                    if type(inimigo) == Alienigena:
-                        for projetil in inimigo.projeteis:
-                            if self.p2.colisao.colliderect(projetil.colisao):
-                                projetil.colidido = True
-                                inimigo.projeteis.remove(projetil)
-                                if time.time() - self.p2.time_inalvejavel > 5:
-                                    self.p2.vida -= 1
-                                    if self.p2.vida == 0:
-                                        self.encerrada = True
-                                        print("GAME OVER")
-                                        sys.exit(0)
-                                    else:
-                                        new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
-                                        new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
-                                        self.p2.time_inalvejavel=time.time()
+                    if pygame.key.get_pressed()[pygame.K_LEFT]:
+                        new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                    if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                        new_p2x = self.p2.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                    if pygame.key.get_pressed()[pygame.K_DOWN]:
+                        new_p2y = self.p2.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
+                    if pygame.key.get_pressed()[pygame.K_UP]:
+                        new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
+                    
+                    #COLISAO COM PERSONAGEM E PROJETIL
+                    for inimigo in self.inimigos:
+                        if self.p2.colisao.colliderect(inimigo.colisao):
+                            if time.time() - self.p2.time_inalvejavel > 5:
+                                self.p2.vida -= 1
+                                if self.p2.vida == 0:
+                                    self.p2.morto = True
+                                    return
+                                else:
+                                    new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
+                                    new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
+                                    self.p2.time_inalvejavel=time.time()
+                        if type(inimigo) == Alienigena:
+                            for projetil in inimigo.projeteis:
+                                if self.p2.colisao.colliderect(projetil.colisao):
+                                    projetil.colidido = True
+                                    inimigo.projeteis.remove(projetil)
+                                    if time.time() - self.p2.time_inalvejavel > 5:
+                                        self.p2.vida -= 1
+                                        if self.p2.vida == 0:
+                                            self.p2.morto = True
+                                            return
+                                        else:
+                                            new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
+                                            new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
+                                            self.p2.time_inalvejavel=time.time()
 
-                if not self.p2._mapa.is_any_wall(new_p2x, new_p2y):
-                    bombaColisao = False
-                    for bombaVetor in self.bombas:
-                        for bomba in bombaVetor:  
-                            if not bomba.explosao and not self.p2.colisao.colliderect(bomba.colisao): #Para não colidir após colocar a bomba
-                                bomba_tile = (bomba.getX() // ConfigJogo.TAM_TILE, bomba.getY() // ConfigJogo.TAM_TILE)
-                                new_p2_tile_left = (new_p2x // ConfigJogo.TAM_TILE, new_p2y // ConfigJogo.TAM_TILE)
-                                new_p2_tile_right = ((new_p2x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE, new_p2y // ConfigJogo.TAM_TILE)
-                                new_p2_tile_down = (new_p2x // ConfigJogo.TAM_TILE, (new_p2y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE)
+                    if not self.p2._mapa.is_any_wall(new_p2x, new_p2y):
+                        bombaColisao = False
+                        for bombaVetor in self.bombas:
+                            for bomba in bombaVetor:  
+                                if not bomba.explosao and not self.p2.colisao.colliderect(bomba.colisao): #Para não colidir após colocar a bomba
+                                    bomba_tile = (bomba.getX() // ConfigJogo.TAM_TILE, bomba.getY() // ConfigJogo.TAM_TILE)
+                                    new_p2_tile_left = (new_p2x // ConfigJogo.TAM_TILE, new_p2y // ConfigJogo.TAM_TILE)
+                                    new_p2_tile_right = ((new_p2x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE, new_p2y // ConfigJogo.TAM_TILE)
+                                    new_p2_tile_down = (new_p2x // ConfigJogo.TAM_TILE, (new_p2y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE)
 
-                                if bomba_tile in [new_p2_tile_left, new_p2_tile_right, new_p2_tile_down]:
-                                    bombaColisao = True
-                            if bomba.explosao: # colisao com a explosao
-                                for rect in bomba.explosoes:
-                                    if rect.colliderect(self.p2.colisao):
-                                        if time.time() - self.p2.time_inalvejavel > 5:
-                                            self.p2.vida -= 1
-                                            if self.p2.vida == 0:
-                                                self.encerrada = True
-                                                print("GAME OVER")
-                                                sys.exit(0)
-                                            else:
-                                                new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
-                                                new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
-                                                self.p2.time_inalvejavel=time.time()
+                                    if bomba_tile in [new_p2_tile_left, new_p2_tile_right, new_p2_tile_down]:
+                                        bombaColisao = True
+                                if bomba.explosao: # colisao com a explosao
+                                    for rect in bomba.explosoes:
+                                        if rect.colliderect(self.p2.colisao):
+                                            if time.time() - self.p2.time_inalvejavel > 5:
+                                                self.p2.vida -= 1
+                                                if self.p2.vida == 0:
+                                                    self.p2.morto = True
+                                                    return
+                                                else:
+                                                    new_p2x = ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE
+                                                    new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
+                                                    self.p2.time_inalvejavel=time.time()
 
-                    if not bombaColisao:
-                        self.p2.setX(new_p2x)
-                        self.p2.setY(new_p2y)
-                        self.p2.colisao = self.p2.personagem.get_rect(topleft=(new_p2x, new_p2y))
+                        if not bombaColisao:
+                            self.p2.setX(new_p2x)
+                            self.p2.setY(new_p2y)
+                            self.p2.colisao = self.p2.personagem.get_rect(topleft=(new_p2x, new_p2y))
 
-                        self.p2._time_last_move = time.time()
+                            self.p2._time_last_move = time.time()
 
 
     def desenha_menu(self):
