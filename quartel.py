@@ -32,6 +32,7 @@ class Quartel:
                                 self._vida -= 1
                                 print(self._vida)
                                 if self._vida == 0:
+                                    bomba.p.addPontos(100)
                                     pass
         
         if ConfigJogo.INIMIGOS:
@@ -86,6 +87,9 @@ class Quartel:
         al1.setX(150)
         al1.setY(400)
         self.inimigos.append(al1)
+    
+    def getVida(self):
+        return self._vida
     
     def quartel_colisao(self, x, y):
         if self.colisao.collidepoint(x, y):
