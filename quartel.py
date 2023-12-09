@@ -35,7 +35,7 @@ class Quartel:
                                     pass
 
 
-        if  time.time() - self._time_last_spawn > 2:
+        if  time.time() - self._time_last_spawn > ConfigJogo.CD_SPAWN and len(self.inimigos) < ConfigJogo.MAX_INIMIGOS:
             rand = random.randint(0, 1)
             if rand == 0:
                 self.inimigos.append(Fantasma(self.mapa, self.tela))

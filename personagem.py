@@ -22,8 +22,11 @@ class Personagem:
         self.colisao = self.personagem.get_rect(topleft=(self._x, self._y))
         self.inalvejavel = True
         self.quartel = quartel
-        
+        self.cd = ConfigJogo.CD_PERSONAGEM
+        self.cd_atualizado = False
+        self.tipo_fantasma_perto = None
         self.vida = ConfigJogo.VIDA_PERSONAGEM
+        self.duracao_bomba = ConfigJogo.DURACAO_BOMBA
 
         self._time_last_move = 0
         self.time_inalvejavel = time.time()
@@ -36,7 +39,7 @@ class Personagem:
 
     def soltar_bomba(self, bombasVetor, player):
         if len(self.bombas) < ConfigJogo.MAX_BOMBA:
-            bomba = Bomba(self, self._x+ConfigJogo.TAM_TILE/2, self._y+ConfigJogo.TAM_TILE/2, self.quartel)
+            bomba = Bomba(self, self._x+ConfigJogo.TAM_TILE/2, self._y+ConfigJogo.TAM_TILE/2, self.quartel, self.duracao_bomba)
             if bomba.verificar():
                 self.bombas.append(bomba)
                 if player == 1:
