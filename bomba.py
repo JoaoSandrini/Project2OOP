@@ -233,6 +233,7 @@ class Bomba:
                 lin = pos[0]
                 col = pos[1]
                 mapa.explodirBloco(lin, col, 1)
+                self.p.set_pontos(self.p.get_pontos() + ConfigJogo.PONTUACAO_BLOCO)
             self.explosao = False
             self.p.bombas.remove(self)
             for bombasVetor in bombasVetores:
@@ -257,3 +258,5 @@ class Bomba:
     
     def setY(self, y):
         self._y = y
+
+    

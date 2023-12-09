@@ -6,9 +6,11 @@ import pygame
 import random   
 import time
 from mapa import Mapa
+from personagem import Personagem
 class Quartel:
     def __init__(self, mapa: Mapa, tela: pygame.Surface):
         self.img_quartel = ler_imagem('enemies/ship.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
+        self.grama = mapa.grama
         self._x = ConfigJogo.QUARTEL_X
         self._y = ConfigJogo.QUARTEL_Y 
         self._vida = ConfigJogo.VIDA_QUARTEL
@@ -19,6 +21,7 @@ class Quartel:
         self.tela = tela
         self.time_inalvejavel = 0
         self.colisao = self.img_quartel.get_rect(topleft=(self._x, self._y)) #atualiza a colisao
+
 
     def tratamento_eventos(self, bombaVetores):
         timeAtt = time.time()
@@ -32,6 +35,8 @@ class Quartel:
                                 self._vida -= 1
                                 print(self._vida)
                                 if self._vida == 0:
+                                    bomba.p.set_pontos(bomba.p.get_pontos() + ConfigJogo.PONTUACAO_QUARTEL)
+                                    self.img_quartel = self.grama
                                     pass
         
         if ConfigJogo.INIMIGOS:
@@ -91,3 +96,9 @@ class Quartel:
         if self.colisao.collidepoint(x, y):
             return True
         return False
+
+    def get_vida(self):
+        return self._vida
+    
+    def set_vida(self, vida):
+        self._vida = vida

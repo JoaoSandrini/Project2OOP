@@ -16,21 +16,20 @@ class Personagem:
         self._sprites = [self._bomberman_a, self._bomberman_b, self._bomberman_l, self._bomberman_p]
         self.pIdx = random.randint(0, 3)
         self.personagem = self._sprites[self.pIdx]
-        self._mapa = mapa
+        self.mapa = mapa
         self._x = x
         self._y = y
-        self.pontos = 0
+        self._pontos = 0
         self.colisao = self.personagem.get_rect(topleft=(self._x, self._y))
         self.inalvejavel = True
         self.quartel = quartel
         self.cd = ConfigJogo.CD_PERSONAGEM
         self.cd_atualizado = False
         self.tipo_fantasma_perto = None
-        self.vida = ConfigJogo.VIDA_PERSONAGEM
+        self._vida = ConfigJogo.VIDA_PERSONAGEM
         self.duracao_bomba = ConfigJogo.DURACAO_BOMBA
         self.colisao_quartel = False
         self.morto = False
-
         self._time_last_move = 0
         self.time_inalvejavel = time.time()
         self.tela = tela
@@ -67,3 +66,15 @@ class Personagem:
     
     def set_cooldown(self, cd):
         self.cd = cd
+    
+    def get_pontos(self):
+        return self._pontos
+
+    def set_pontos(self, pontos):
+        self._pontos = pontos
+
+    def get_vida(self):
+        return self._vida
+    
+    def set_vida(self, vida):
+        self._vida = vida

@@ -2,6 +2,7 @@ import pygame
 from config_jogo import ConfigJogo
 from cena_inicial import CenaInicial
 from cena_principal import CenaPrincipal
+from cena_final import CenaFinal
 
 class Jogo:
     def __init__(self):
@@ -13,15 +14,23 @@ class Jogo:
 
         self.bombas = [[],[]]
         self.projeteis = []
+        self.inimigos = []
 
     def rodar(self):
-        cena = CenaInicial(self.tela)
-        cena.rodar()
+        cena_inicial = CenaInicial(self.tela)
+        cena_inicial.rodar()
         
         while True:
-            cena_principal = CenaPrincipal(self.tela, cena.num_jogadores, self.bombas, self.projeteis)
+            cena_principal = CenaPrincipal(self.tela, cena_inicial.num_jogadores, self.bombas, self.projeteis)
             cena_principal.rodar()
-            self.projeteis = cena_principal.alien.projeteis
+
+            cena_final = CenaFinal(self.tela, cena_principal.p1, cena_principal.p2)
+            cena_final.rodar()
+
+            cena_inicial.rodar()
+
+            
+
 """
             for bomba in cena_principal.p1.bombas:
                 if len(self.bombas[0]) < 4:  # Limit to 4 bombs per player
