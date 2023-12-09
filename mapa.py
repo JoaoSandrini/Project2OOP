@@ -18,7 +18,7 @@ class Mapa:
         self.fixa = ler_imagem('map/parede-fixa.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
 
         self.map_matrix = []
-        with open('map/mapMatrix.csv', newline='') as csvfile:
+        with open('map/mapa_testes.csv', newline='') as csvfile:
             spamreader = csv.reader(csvfile)
             for linha in spamreader:
                 linha = [int(valor) for valor in linha]
@@ -43,6 +43,7 @@ class Mapa:
                     tela.blit(self.fixa, (px, py))
 
     def is_any_wall(self, x, y):
+        
         y -= ConfigJogo.ALTURA_MENU
 
         lin_idx_c_e = y // ConfigJogo.TAM_TILE
@@ -56,8 +57,9 @@ class Mapa:
                     tile_type = self.map_matrix[lin_idx][col_idx]
                     if tile_type != TileType.GRAMA.value:
                         return True
-    
+                    
     def is_fixed_wall(self, x, y):
+        
         y -= ConfigJogo.ALTURA_MENU
 
         lin_idx_c_e = y // ConfigJogo.TAM_TILE
@@ -71,4 +73,44 @@ class Mapa:
                     tile_type = self.map_matrix[lin_idx][col_idx]
                     if tile_type == TileType.FIXA.value:
                         return True
+                    
+    def destrutivel(self, x, y):
+        y -= ConfigJogo.ALTURA_MENU
+
+        lin_idx_c_e = y // ConfigJogo.TAM_TILE
+        col_idx_c_e = x // ConfigJogo.TAM_TILE
+        lin_idx_b_d = (y + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE
+        col_idx_b_d = (x + ConfigJogo.TAM_TILE - 1) // ConfigJogo.TAM_TILE
+
+        for lin_idx in range(int(lin_idx_c_e), int(lin_idx_b_d + 1)):
+            for col_idx in range(int(col_idx_c_e), int(col_idx_b_d + 1)):
+                if 0 <= lin_idx < len(self.map_matrix) and 0 <= col_idx < len(self.map_matrix[0]):
+                    tile_type = self.map_matrix[lin_idx][col_idx]
+                    if tile_type == TileType.DESTRUTIVEL_C.value:
+                        return TileType.DESTRUTIVEL_C.value
+                    elif tile_type == TileType.FIXA.value or tile_type == TileType.DESTRUTIVEL_M.value:
+                        return TileType.FIXA.value
+                    else:
+                        return TileType.GRAMA.value
+                    
+    def explodirBloco(self, lin, col, explosao):
+        if explosao == 0:
+            self.map_matrix[lin][col] = TileType.DESTRUTIVEL_M.value
+        else:  
+            self.map_matrix[lin][col] = TileType.GRAMA.value
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
