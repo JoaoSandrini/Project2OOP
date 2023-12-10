@@ -73,7 +73,6 @@ class CenaPrincipal():
         personagem.tipo_fantasma_perto = aura_fantasma_perto
                 
     def rodar(self):
-        self.bombas = [[],[]]
         while not self.encerrada:
             self.mapa.desenha(self.tela)
 
@@ -96,7 +95,10 @@ class CenaPrincipal():
 
     def tratamento_eventos(self):
         if self.quartel.getVida() == 0:
-                self.derrota = False
+            self.derrota = False
+            self.encerrada = True
+            time.sleep(1)
+            return
         if not self.p2:
             if self.p1.morto:
                 self.encerrada = True

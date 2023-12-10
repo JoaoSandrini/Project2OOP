@@ -16,17 +16,20 @@ class Jogo:
         self.projeteis = []
         self.inimigos = []
 
-    def rodar(self):
-        cena_inicial = CenaInicial(self.tela)
-        cena_inicial.rodar()
-        
+    def rodar(self):        
         while True:
+            cena_inicial = CenaInicial(self.tela)
+            cena_inicial.rodar()
+
             cena_principal = CenaPrincipal(self.tela, cena_inicial.num_jogadores, self.bombas, self.projeteis)
             cena_principal.rodar()
 
             cena_final = CenaFinal(self.tela, cena_principal.p1, cena_principal.p2, cena_principal.derrota)
             cena_final.rodar()
             break
+        self.bombas = [[],[]]
+        self.projeteis = []
+        self.inimigos = []
         self.rodar()
 
             
