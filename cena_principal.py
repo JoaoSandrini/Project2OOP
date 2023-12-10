@@ -73,7 +73,6 @@ class CenaPrincipal():
         personagem.tipo_fantasma_perto = aura_fantasma_perto
                 
     def rodar(self):
-        self.bombas = [[],[]]
         while not self.encerrada:
             self.mapa.desenha(self.tela)
 
