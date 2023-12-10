@@ -14,7 +14,7 @@ class Direcao(Enum):
 class Fantasma:
     def __init__(self, mapa: Mapa, tela: pygame.Surface) -> None:
         self.img_fantasma= ler_imagem('enemies/enemy-fantasma.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
-
+        self.morto = False
         self.vida = ConfigJogo.VIDA_INIMIGO
         self._mapa = mapa
         self._x = ConfigJogo.QUARTEL_X
@@ -57,8 +57,9 @@ class Fantasma:
                                 self.time_inalvejavel = timeAtt
                                 self.vida -= 1
                                 if self.vida == 0:
+                                    self.morto = True
                                     inimigos.remove(self)
-                                    bomba.p.set_pontos(bomba.p.get_pontos() + ConfigJogo.PONTUACAO_INIMIGO)
+                                    bomba.p.addPontos(ConfigJogo.PONTUACAO_INIMIGO)
                                 else:
                                     self.setX(ConfigJogo.QUARTEL_X)
                                     self.setY(ConfigJogo.QUARTEL_Y)

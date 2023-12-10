@@ -49,7 +49,7 @@ class Alienigena:
                                 self.vida -= 1
                                 if self.vida == 0:
                                     inimigos.remove(self)
-                                    bomba.p.set_pontos(bomba.p.get_pontos() + ConfigJogo.PONTUACAO_INIMIGO)
+                                    bomba.p.addPontos(ConfigJogo.PONTUACAO_INIMIGO)
                                 else:
                                     self.setX(ConfigJogo.QUARTEL_X)
                                     self.setY(ConfigJogo.QUARTEL_Y)

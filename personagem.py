@@ -16,7 +16,7 @@ class Personagem:
         self._sprites = [self._bomberman_a, self._bomberman_b, self._bomberman_l, self._bomberman_p]
         self.pIdx = random.randint(0, 3)
         self.personagem = self._sprites[self.pIdx]
-        self.mapa = mapa
+        self._mapa = mapa
         self._x = x
         self._y = y
         self._pontos = 0
@@ -66,7 +66,6 @@ class Personagem:
     
     def set_cooldown(self, cd):
         self.cd = cd
-<<<<<<< HEAD
     
     def get_pontos(self):
         return self._pontos
@@ -79,11 +78,9 @@ class Personagem:
     
     def set_vida(self, vida):
         self._vida = vida
-=======
 
     def addPontos(self, pontos):
-        self.pontos += pontos
+        self._pontos += pontos
 
     def getMapa(self):
         return self._mapa
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd

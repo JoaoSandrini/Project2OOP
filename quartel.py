@@ -35,12 +35,8 @@ class Quartel:
                                 self._vida -= 1
                                 print(self._vida)
                                 if self._vida == 0:
-<<<<<<< HEAD
-                                    bomba.p.set_pontos(bomba.p.get_pontos() + ConfigJogo.PONTUACAO_QUARTEL)
+                                    bomba.p.addPontos(ConfigJogo.PONTUACAO_QUARTEL)
                                     self.img_quartel = self.grama
-=======
-                                    bomba.p.addPontos(100)
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                                     pass
         
         if ConfigJogo.INIMIGOS:

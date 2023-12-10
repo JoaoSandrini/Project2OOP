@@ -198,16 +198,6 @@ class Bomba:
     def atualizar(self, mapa: Mapa, bombasVetores):
         self.inimigos = self.quartel.getInimigos()
         tempo_atual = time.time()
-<<<<<<< HEAD
-
-        if tempo_atual - self.time_lancamento > self.duracao:                                                               
-            self.explodida = True
-
-    def desenha(self, tela: pygame.Surface):
-        self.atualizar()
-        if not self.explodida:
-            tela.blit(self.img_bomba, (self._x, self._y))       
-=======
         if not self.explodida:
             self.diferencaTempo  = tempo_atual - self.time_lancamento
         else:
@@ -256,7 +246,6 @@ class Bomba:
             tela.blit(self.img_bomba, (self._x, self._y))
         if self.explodida:
             self.explodir(tela, mapa, p1, p2)
->>>>>>> 4ccb873f2d9b052d2a8f9aa193525f69a75a1a1c
 
     def getX(self):
         return self._x

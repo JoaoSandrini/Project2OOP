@@ -21,7 +21,7 @@ class CenaPrincipal():
     def __init__(self, tela: pygame.display, num_jogadores: int, bombas: list[list[Bomba], list[Bomba]], projeteis: list[Projetil]):
         self.mapa = Mapa()
         self.tela = tela
-        self.encerrada = True
+        self.encerrada = False
         self.inimigos = []
         self.quartel = Quartel(self.mapa, self.tela)
         self.cronometro = Cronometro()
@@ -42,6 +42,7 @@ class CenaPrincipal():
                 self.p2 = Personagem(self.mapa, (ConfigJogo.LARGURA_TELA - 2*ConfigJogo.TAM_TILE), (ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE), self.tela, self.quartel)
 
     def verifica_aura(self, personagem: Personagem):
+        self.quartel.fantasmas = [fantasma for fantasma in self.quartel.fantasmas if not fantasma.morto]
         if self.quartel.fantasmas: 
             posicoes_fantasmas = np.array([
                 (float(inimigo.getX()), float(inimigo.getY()), inimigo.get_tipo_aura())
@@ -95,26 +96,16 @@ class CenaPrincipal():
        
             pygame.display.flip()
 
-<<<<<<< HEAD
-    def tratamento_eventos(self):   
-        if self.quartel.get_vida() == 0:
-=======
     def tratamento_eventos(self):
         if self.p1.morto and self.p2.morto or self.quartel.getVida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
             self.encerrada = True
             time.sleep(1)
             return
         if not self.p2:
-            if self.p1.get_vida() == 0:
+            if self.p1.morto:
                 self.encerrada = True
                 time.sleep(1)
-                return
-        else:
-            if self.p1.get_vida() == 0 and self.p2.get_vida() == 0:
-                self.encerrada = True
-                time.sleep(1)
-                return    
+                return  
         self.inimigos = self.quartel.getInimigos()
         tempo = time.time()
         # evento de saida
@@ -147,15 +138,9 @@ class CenaPrincipal():
                     new_p1y = self.p1.getY()
                 
                     if pygame.key.get_pressed()[pygame.K_a]:
-<<<<<<< HEAD
-                        if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1.mapa.destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                            new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1.mapa.destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-=======
                         if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1.getMapa().destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
                             new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1.getMapa().destrutivel(self.p1.getX()-1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -165,15 +150,9 @@ class CenaPrincipal():
                                 self.p1.colisao_quartel = False
                                         
                     if pygame.key.get_pressed()[pygame.K_d]:
-<<<<<<< HEAD
-                        if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1.mapa.destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                            new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1.mapa.destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-=======
                         if (self.p1.getY()%ConfigJogo.TAM_TILE)<15 and (self.p1.getY()%ConfigJogo.TAM_TILE)!=0 and self.p1.getMapa().destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
                             new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p1.getY()%ConfigJogo.TAM_TILE)>17 and self.p1.getMapa().destrutivel(self.p1.getX()+ConfigJogo.TAM_TILE+1, self.p1.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -183,15 +162,9 @@ class CenaPrincipal():
                                 self.p1.colisao_quartel = False
                                 
                     if pygame.key.get_pressed()[pygame.K_s]:
-<<<<<<< HEAD
-                        if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1.mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
-                            new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1.mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
-=======
                         if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1.getMapa().destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
                             new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1.getMapa().destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p1y = self.p1.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -201,15 +174,9 @@ class CenaPrincipal():
                                 self.p1.colisao_quartel = False
 
                     if pygame.key.get_pressed()[pygame.K_w]:
-<<<<<<< HEAD
-                        if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1.mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
-                            new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1.mapa.destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
-=======
                         if (self.p1.getX()%ConfigJogo.TAM_TILE)<15 and (self.p1.getX()%ConfigJogo.TAM_TILE)!=0 and self.p1.getMapa().destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
                             new_p1x = self.p1.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p1.getX()%ConfigJogo.TAM_TILE)>17 and self.p1.getMapa().destrutivel(self.p1.getX()+int(ConfigJogo.TAM_TILE/2), self.p1.getY()-1)==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p1x = self.p1.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p1y = self.p1.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -223,7 +190,7 @@ class CenaPrincipal():
                         if self.p1.colisao.colliderect(inimigo.colisao):
                             if time.time() - self.p1.time_inalvejavel > 5:
                                 self.p1.set_vida(self.p1.get_vida() - 1)
-                                if self.p1.get_vida == 0:
+                                if self.p1.get_vida() == 0:
                                     self.p1.morto = True
                                     return
                                 else:
@@ -237,7 +204,7 @@ class CenaPrincipal():
                                     inimigo.projeteis.remove(projetil)
                                     if time.time() - self.p1.time_inalvejavel > 5:
                                         self.p1.set_vida(self.p1.get_vida() - 1)
-                                        if self.p1.get_vida == 0:
+                                        if self.p1.get_vida() == 0:
                                             self.p1.morto = True
                                             return
                                         else:
@@ -245,11 +212,7 @@ class CenaPrincipal():
                                             new_p1y = ConfigJogo.TAM_TILE + ConfigJogo.ALTURA_MENU
                                             self.p1.time_inalvejavel=time.time()
                                 
-<<<<<<< HEAD
-                    if not self.p1.mapa.is_any_wall(new_p1x, new_p1y) and not self.p1.colisao_quartel:
-=======
                     if not self.p1.getMapa().is_any_wall(new_p1x, new_p1y) and not self.p1.colisao_quartel:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
 
                         bombaColisao = False
 
@@ -268,7 +231,7 @@ class CenaPrincipal():
                                         if rect.colliderect(self.p1.colisao):
                                             if time.time() - self.p1.time_inalvejavel > 5:
                                                 self.p1.set_vida(self.p1.get_vida() - 1)
-                                                if self.p1.get_vida == 0:
+                                                if self.p1.get_vida() == 0:
                                                     self.p1.morto = True
                                                     return
                                                 else:
@@ -302,15 +265,9 @@ class CenaPrincipal():
                     new_p2y = self.p2.getY()
 
                     if pygame.key.get_pressed()[pygame.K_LEFT]:
-<<<<<<< HEAD
-                        if (self.p2.getY()%ConfigJogo.TAM_TILE)<15 and (self.p2.getY()%ConfigJogo.TAM_TILE)!=0 and self.p2.mapa.destrutivel(self.p2.getX()-1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                            new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p2.getY()%ConfigJogo.TAM_TILE)>17 and self.p2.mapa.destrutivel(self.p2.getX()-1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-=======
                         if (self.p2.getY()%ConfigJogo.TAM_TILE)<15 and (self.p2.getY()%ConfigJogo.TAM_TILE)!=0 and self.p2.getMapa().destrutivel(self.p2.getX()-1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
                             new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p2.getY()%ConfigJogo.TAM_TILE)>17 and self.p2.getMapa().destrutivel(self.p2.getX()-1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p2y = self.p2.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -320,15 +277,9 @@ class CenaPrincipal():
                                 self.p2.colisao_quartel = False
                                         
                     if pygame.key.get_pressed()[pygame.K_RIGHT]:
-<<<<<<< HEAD
-                        if (self.p2.getY()%ConfigJogo.TAM_TILE)<15 and (self.p2.getY()%ConfigJogo.TAM_TILE)!=0 and self.p2.mapa.destrutivel(self.p2.getX()+ConfigJogo.TAM_TILE+1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-                            new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p2.getY()%ConfigJogo.TAM_TILE)>17 and self.p2.mapa.destrutivel(self.p2.getX()+ConfigJogo.TAM_TILE+1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
-=======
                         if (self.p2.getY()%ConfigJogo.TAM_TILE)<15 and (self.p2.getY()%ConfigJogo.TAM_TILE)!=0 and self.p2.getMapa().destrutivel(self.p2.getX()+ConfigJogo.TAM_TILE+1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
                             new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p2.getY()%ConfigJogo.TAM_TILE)>17 and self.p2.getMapa().destrutivel(self.p2.getX()+ConfigJogo.TAM_TILE+1, self.p2.getY()+int(ConfigJogo.TAM_TILE/2))==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p2y = self.p2.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p2x = self.p2.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -338,15 +289,9 @@ class CenaPrincipal():
                                 self.p2.colisao_quartel = False
                                 
                     if pygame.key.get_pressed()[pygame.K_DOWN]:
-<<<<<<< HEAD
-                        if (self.p2.getX()%ConfigJogo.TAM_TILE)<15 and (self.p2.getX()%ConfigJogo.TAM_TILE)!=0 and self.p2.mapa.destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
-                            new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p2.getX()%ConfigJogo.TAM_TILE)>17 and self.p2.mapa.destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
-=======
                         if (self.p2.getX()%ConfigJogo.TAM_TILE)<15 and (self.p2.getX()%ConfigJogo.TAM_TILE)!=0 and self.p2.getMapa().destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
                             new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p2.getX()%ConfigJogo.TAM_TILE)>17 and self.p2.getMapa().destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()+ConfigJogo.TAM_TILE+1)==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p2x = self.p2.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p2y = self.p2.getY() + ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -356,15 +301,9 @@ class CenaPrincipal():
                                 self.p2.colisao_quartel = False
 
                     if pygame.key.get_pressed()[pygame.K_UP]:
-<<<<<<< HEAD
-                        if (self.p2.getX()%ConfigJogo.TAM_TILE)<15 and (self.p2.getX()%ConfigJogo.TAM_TILE)!=0 and self.p2.mapa.destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()-1)==TileType.GRAMA.value:
-                            new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
-                        elif (self.p2.getX()%ConfigJogo.TAM_TILE)>17 and self.p2.mapa.destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()-1)==TileType.GRAMA.value:
-=======
                         if (self.p2.getX()%ConfigJogo.TAM_TILE)<15 and (self.p2.getX()%ConfigJogo.TAM_TILE)!=0 and self.p2.getMapa().destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()-1)==TileType.GRAMA.value:
                             new_p2x = self.p2.getX() - ConfigJogo.VELOCIDADE_PERSONAGEM
                         elif (self.p2.getX()%ConfigJogo.TAM_TILE)>17 and self.p2.getMapa().destrutivel(self.p2.getX()+int(ConfigJogo.TAM_TILE/2), self.p2.getY()-1)==TileType.GRAMA.value:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                             new_p2x = self.p2.getX() + ConfigJogo.VELOCIDADE_PERSONAGEM
                         else:
                             new_p2y = self.p2.getY() - ConfigJogo.VELOCIDADE_PERSONAGEM
@@ -378,7 +317,7 @@ class CenaPrincipal():
                         if self.p2.colisao.colliderect(inimigo.colisao):
                             if time.time() - self.p2.time_inalvejavel > 5:
                                 self.p2.set_vida(self.p2.get_vida() - 1)
-                                if self.p2.get_vida == 0:
+                                if self.p2.get_vida() == 0:
                                     self.p2.morto = True
                                     return
                                 else:
@@ -392,7 +331,7 @@ class CenaPrincipal():
                                     inimigo.projeteis.remove(projetil)
                                     if time.time() - self.p2.time_inalvejavel > 5:
                                         self.p2.set_vida(self.p2.get_vida() - 1)
-                                        if self.p2.get_vida == 0:
+                                        if self.p2.get_vida() == 0:
                                             self.p2.morto = True
                                             return
                                         else:
@@ -400,11 +339,7 @@ class CenaPrincipal():
                                             new_p2y = ConfigJogo.ALTURA_TELA - 2*ConfigJogo.TAM_TILE
                                             self.p2.time_inalvejavel=time.time()
 
-<<<<<<< HEAD
-                    if not self.p2.mapa.is_any_wall(new_p2x, new_p2y) and not self.p2.colisao_quartel:
-=======
                     if not self.p2.getMapa().is_any_wall(new_p2x, new_p2y) and not self.p2.colisao_quartel:
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
                         bombaColisao = False
                         for bombaVetor in self.bombas:
                             for bomba in bombaVetor:  
@@ -421,7 +356,7 @@ class CenaPrincipal():
                                         if rect.colliderect(self.p2.colisao):
                                             if time.time() - self.p2.time_inalvejavel > 5:
                                                 self.p2.set_vida(self.p2.get_vida() - 1)
-                                                if self.p2.get_vida == 0:
+                                                if self.p2.get_vida() == 0:
                                                     self.p2.morto = True
                                                     return
                                                 else:
