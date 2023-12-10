@@ -11,10 +11,6 @@ from config_jogo import ConfigJogo
 from projetil import Projetil
 from utils import ler_imagem
 from quartel import Quartel
-import random
-from pygame import gfxdraw
-from fantasma import Fantasma
-import math
 import numpy as np
 
 class CenaPrincipal():
@@ -27,6 +23,7 @@ class CenaPrincipal():
         self.cronometro = Cronometro()
         self.bombas = bombas
         self.projeteis = projeteis
+        self.derrota = True
         
         self._time_last_spawn = 0
         self.img_relogio = ler_imagem('telas/relogio.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
@@ -60,12 +57,12 @@ class CenaPrincipal():
                 if not personagem.cd_atualizado or personagem.tipo_fantasma_perto != aura_fantasma_perto:
                     self.atualiza_cd(personagem, aura_fantasma_perto)
 
-            elif distancias[idx_fantasma_perto] > ConfigJogo.RAIO_AURA:
+            else:
                 personagem.cd_atualizado = False
                 personagem.cd = ConfigJogo.CD_PERSONAGEM
                 personagem.duracao_bomba = ConfigJogo.DURACAO_BOMBA
 
-    def atualiza_cd(self, personagem, aura_fantasma_perto):
+    def atualiza_cd(self, personagem: Personagem, aura_fantasma_perto: int):
         if aura_fantasma_perto == 0:
             personagem.cd = ConfigJogo.CD_AURA_RAPIDA
             personagem.duracao_bomba = ConfigJogo.DURACAO_BOMBA_RAPIDA
@@ -76,6 +73,7 @@ class CenaPrincipal():
         personagem.tipo_fantasma_perto = aura_fantasma_perto
                 
     def rodar(self):
+        self.bombas = [[],[]]
         while not self.encerrada:
             self.mapa.desenha(self.tela)
 
@@ -97,15 +95,17 @@ class CenaPrincipal():
             pygame.display.flip()
 
     def tratamento_eventos(self):
-        if self.p1.morto and self.p2.morto or self.quartel.getVida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
-            self.encerrada = True
-            time.sleep(1)
-            return
+        if self.quartel.getVida() == 0:
+                self.derrota = False
         if not self.p2:
             if self.p1.morto:
                 self.encerrada = True
                 time.sleep(1)
-                return  
+                return          
+        elif self.p1.morto and self.p2.morto or self.quartel.getVida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
+            self.encerrada = True
+            time.sleep(1)
+            return
         self.inimigos = self.quartel.getInimigos()
         tempo = time.time()
         # evento de saida
