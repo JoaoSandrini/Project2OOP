@@ -66,24 +66,9 @@ class Personagem:
     
     def set_cooldown(self, cd):
         self.cd = cd
-<<<<<<< HEAD
-    
-    def get_pontos(self):
-        return self._pontos
-
-    def set_pontos(self, pontos):
-        self._pontos = pontos
-
-    def get_vida(self):
-        return self._vida
-    
-    def set_vida(self, vida):
-        self._vida = vida
-=======
 
     def addPontos(self, pontos):
         self.pontos += pontos
 
     def getMapa(self):
         return self._mapa
->>>>>>> 87d808ee57894546145707ebed6a08339ad53dbd
