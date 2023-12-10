@@ -1,6 +1,6 @@
 class ConfigJogo:
-
-    INIMIGOS = False
+    MAPA = 'map/MapMatrix.csv'
+    INIMIGOS = True
     TAM_TILE = 32
     ALTURA_MENU = 2*TAM_TILE
     LARGURA_TELA = TAM_TILE*20
