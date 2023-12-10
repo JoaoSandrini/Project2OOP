@@ -56,12 +56,12 @@ class CenaPrincipal():
                 if not personagem.cd_atualizado or personagem.tipo_fantasma_perto != aura_fantasma_perto:
                     self.atualiza_cd(personagem, aura_fantasma_perto)
 
-            elif distancias[idx_fantasma_perto] > ConfigJogo.RAIO_AURA:
+            else:
                 personagem.cd_atualizado = False
                 personagem.cd = ConfigJogo.CD_PERSONAGEM
                 personagem.duracao_bomba = ConfigJogo.DURACAO_BOMBA
 
-    def atualiza_cd(self, personagem, aura_fantasma_perto):
+    def atualiza_cd(self, personagem: Personagem, aura_fantasma_perto: int):
         if aura_fantasma_perto == 0:
             personagem.cd = ConfigJogo.CD_AURA_RAPIDA
             personagem.duracao_bomba = ConfigJogo.DURACAO_BOMBA_RAPIDA
@@ -97,12 +97,12 @@ class CenaPrincipal():
             if self.p1.get_vida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
                 self.derrota = True
                 self.encerrada = True
-                time.sleep(1)
+                time.sleep(0.1)
                 return
         else:
             if self.p1.get_vida() == 0 and self.p2.get_vida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
                 self.encerrada = True
-                time.sleep(1)
+                time.sleep(0.1)
                 return
         if self.quartel.get_vida() == 0:   
             self.encerrada = True
