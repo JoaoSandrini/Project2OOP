@@ -11,22 +11,19 @@ from config_jogo import ConfigJogo
 from projetil import Projetil
 from utils import ler_imagem
 from quartel import Quartel
-import random
-from pygame import gfxdraw
-from fantasma import Fantasma
-import math
 import numpy as np
 
 class CenaPrincipal():
     def __init__(self, tela: pygame.display, num_jogadores: int, bombas: list[list[Bomba], list[Bomba]], projeteis: list[Projetil]):
         self.mapa = Mapa()
         self.tela = tela
-        self.encerrada = True
+        self.encerrada = False
         self.inimigos = []
         self.quartel = Quartel(self.mapa, self.tela)
         self.cronometro = Cronometro()
         self.bombas = bombas
         self.projeteis = projeteis
+        self.derrota = False
         
         self._time_last_spawn = 0
         self.img_relogio = ler_imagem('telas/relogio.png', (ConfigJogo.TAM_TILE, ConfigJogo.TAM_TILE))
@@ -96,20 +93,21 @@ class CenaPrincipal():
             pygame.display.flip()
 
     def tratamento_eventos(self):
-        if self.p1.morto and self.p2.morto or self.quartel.getVida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
-            self.encerrada = True
-            time.sleep(1)
-            return
         if not self.p2:
-            if self.p1.get_vida() == 0:
+            if self.p1.get_vida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
+                self.derrota = True
                 self.encerrada = True
                 time.sleep(1)
                 return
         else:
-            if self.p1.get_vida() == 0 and self.p2.get_vida() == 0:
+            if self.p1.get_vida() == 0 and self.p2.get_vida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
                 self.encerrada = True
                 time.sleep(1)
-                return    
+                return
+        if self.quartel.get_vida() == 0:   
+            self.encerrada = True
+            time.sleep(1)
+            return 
         self.inimigos = self.quartel.getInimigos()
         tempo = time.time()
         # evento de saida

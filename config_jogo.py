@@ -50,4 +50,5 @@ class ConfigJogo:
     PONTUACAO_BLOCO = 1
     PONTUACAO_INIMIGO = 10
     PONTUACAO_QUARTEL = 100
+    CD_TEXTO = 0.35
     

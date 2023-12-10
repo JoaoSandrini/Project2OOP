@@ -24,7 +24,7 @@ class Jogo:
             cena_principal = CenaPrincipal(self.tela, cena_inicial.num_jogadores, self.bombas, self.projeteis)
             cena_principal.rodar()
 
-            cena_final = CenaFinal(self.tela, cena_principal.p1, cena_principal.p2)
+            cena_final = CenaFinal(self.tela, cena_principal.p1, cena_principal.p2, cena_principal.derrota)
             cena_final.rodar()
 
             cena_inicial.rodar()

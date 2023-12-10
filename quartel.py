@@ -37,7 +37,6 @@ class Quartel:
                                 if self._vida == 0:
                                     bomba.p.set_pontos(bomba.p.get_pontos() + ConfigJogo.PONTUACAO_QUARTEL)
                                     self.img_quartel = self.grama
-                                    pass
         
         if ConfigJogo.INIMIGOS:
             if  time.time() - self._time_last_spawn > ConfigJogo.CD_SPAWN and len(self.inimigos) < ConfigJogo.MAX_INIMIGOS:

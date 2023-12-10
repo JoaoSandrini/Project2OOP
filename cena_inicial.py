@@ -41,7 +41,7 @@ class CenaInicial:
             self.encerrada = True
  
     def atualiza_estado(self):
-        if self.cronometro.tempo_passado() > 0.35:
+        if self.cronometro.tempo_passado() > ConfigJogo.CD_TEXTO:
             self.mostrar_subtitulo = not self.mostrar_subtitulo
             self.cronometro.reset()
 

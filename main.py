@@ -1,5 +1,4 @@
 from jogo import Jogo
-
 def main():
     jogo = Jogo()
     jogo.rodar()
