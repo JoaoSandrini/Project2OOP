@@ -10,10 +10,12 @@ class CenaFinal():
         self.tela = tela
         self.p1 = p1
         self.img_p1 = self.p1.personagem
+        self.img_p1.set_alpha(255)
         self.derrota = derrota
         if p2:
             self.p2 = p2 
             self.img_p2 = self.p2.personagem
+            self.img_p2.set_alpha(255)
         else:
             self.p2 = False
         self.pontos_p1 = self.p1.get_pontos()
@@ -68,8 +70,8 @@ class CenaFinal():
 
         else:
             self.tela.blit(self.textos[4], ((ConfigJogo.LARGURA_TELA * 0.5) - self.textos[5].get_width()//2, py + ConfigJogo.TAM_TILE * 4))
-            
-            self.tela.blit(self.img_p1, (ConfigJogo.LARGURA_TELA * .5 - ConfigJogo.TAM_TILE*.5 , py + ConfigJogo.TAM_TILE * 2))
+            self.tela.blit(self.img_p1, (ConfigJogo.LARGURA_TELA * 0.5 - ConfigJogo.TAM_TILE*.5 , py + ConfigJogo.TAM_TILE * 2))
+
         if self.mostrar_texto:
             self.tela.blit(self.textos[2], ((ConfigJogo.LARGURA_TELA - self.textos[2].get_width()) // 2, ConfigJogo.ALTURA_TELA // 2))
             self.tela.blit(self.textos[3], ((ConfigJogo.LARGURA_TELA - self.textos[3].get_width()) // 2, (ConfigJogo.ALTURA_TELA // 2) + ConfigJogo.TAM_TILE))

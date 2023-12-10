@@ -97,14 +97,13 @@ class CenaPrincipal():
     def tratamento_eventos(self):
         if self.quartel.getVida() == 0:
                 self.derrota = False
-        if not self.p2:
-            if self.p1.morto:
                 self.encerrada = True
-                time.sleep(1)
+        if not self.p2:
+            if self.p1.morto or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
+                self.encerrada = True
                 return          
         elif self.p1.morto and self.p2.morto or self.quartel.getVida() == 0 or self.cronometro.tempo_passado() > ConfigJogo.DURACAO_JOGO:
             self.encerrada = True
-            time.sleep(1)
             return
         self.inimigos = self.quartel.getInimigos()
         tempo = time.time()
@@ -377,7 +376,7 @@ class CenaPrincipal():
     def desenha_menu(self):
         pygame.draw.rect(self.tela, ConfigJogo.COR_HUD, (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU))
         pygame.draw.rect(self.tela, ConfigJogo.COR_BORDA_HUD, (0, 0, ConfigJogo.LARGURA_TELA, ConfigJogo.ALTURA_MENU), 4)
-
+        
         fonte_hud = pygame.font.SysFont(None, ConfigJogo.FONTE_HUD)
         tempo_restante = int(ConfigJogo.DURACAO_JOGO - self.cronometro.tempo_passado())
         minutos =  tempo_restante // 60
@@ -404,8 +403,8 @@ class CenaPrincipal():
             mostra_pont_p1 = fonte_hud.render(f'{self.p1.get_pontos()}', True, ConfigJogo.COR_FONTE_HUD)
             mostra_pont_p2 = fonte_hud.render(f'{self.p2.get_pontos()}', True, ConfigJogo.COR_FONTE_HUD)
 
-            self.tela.blit(mostra_pont_p1, (ConfigJogo.LARGURA_TELA * .57, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
-            self.tela.blit(mostra_pont_p2, (ConfigJogo.LARGURA_TELA * .82, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
+            self.tela.blit(mostra_pont_p1, (ConfigJogo.LARGURA_TELA * .57, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5), 255)
+            self.tela.blit(mostra_pont_p2, (ConfigJogo.LARGURA_TELA * .82, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5), 255)
 
             self.tela.blit(self.p1.personagem, (ConfigJogo.LARGURA_TELA * .5, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
             self.tela.blit(self.p2.personagem, (ConfigJogo.LARGURA_TELA * .75, ConfigJogo.ALTURA_MENU * .5 - ConfigJogo.TAM_TILE * .5))
