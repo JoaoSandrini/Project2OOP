@@ -1,2 +1,4 @@
-# Trabalho 2 - POO
-Work developed for the Object-Oriented Programming course in the Electrical Engineering Program at the Federal University of Espírito Santo.
+# Project 2 - POO
+Project developed for the Object-Oriented Programming course in the Electrical Engineering Program at the Federal University of Espírito Santo.
+This project is a recreation of the classic game Bomberman, with some twists.
+
